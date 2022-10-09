@@ -13,33 +13,25 @@ public class Player {
 }
 
 // Data class for storing a game in the LobbyModel
-public class Game {
-    public readonly string name;
-    public readonly Guid gamehash;
-    public readonly Guid ownerhash;
-    public readonly string password;
-    public readonly int maxplayers;
-    public readonly Guid[] playerhashes;
-    public readonly List<Guid> invited = new List<Guid>();
 
-    public Game(string name, Guid gamehash, Guid ownerhash, string password, int maxplayers) {
-        this.name = name;
-        this.gamehash = gamehash;
-        this.ownerhash = ownerhash;
-        this.password = password;
-        this.maxplayers = maxplayers;
-        playerhashes = new Guid[maxplayers];
-        playerhashes[0] = ownerhash;
-    }
-}
 
 // Model for storing the current state of the Lobby.
 // Any exceptions throws should be forwarded as ActionRejected events.
 public class LobbyModel {
     private readonly Dictionary<Guid, Player> playerHashes = new Dictionary<Guid, Player>();
-    private readonly Dictionary<Guid, Game> gameHashes = new Dictionary<Guid, Game>();
     private readonly Dictionary<String, Player> playerNames = new Dictionary<String, Player>();
     private readonly Dictionary<String, Game> gameNames = new Dictionary<String, Game>();
+
+    public ICollection<string> Players{
+        get {
+            return playerNames.Keys;
+        }
+        private set {}
+    }
+
+    public ICollection<Game> Games{
+        get; private set;
+    }    
 
     // Add a new player to the players list
     // Returns: the player hash.
@@ -55,7 +47,25 @@ public class LobbyModel {
         return player;
     }
 
-    public void RegisterPlayer(string name, string password){
+    public void RemovePlayer(string name){
+        if (!playerNames.ContainsKey(name)){
+            throw new RejectedActionException("", "Unknown player name.");
+        }
+
+        playerNames.Remove(name);
+    }
+
+    public Game CreateGame(string name, string owner, string password, int maxplayers){
+        if (gameNames.ContainsKey(name)){
+            throw new GameNameInUseException();
+        }        
         
+        Game game = new Game(name, owner, password, maxplayers);
+        this.gameNames.Add(name, game);
+        return game;
+    }
+
+    public bool ContainsGame(string name){
+        return this.gameNames.ContainsKey(name);
     }
 }

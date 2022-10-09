@@ -4,7 +4,9 @@ using Newtonsoft.Json.Linq;
 namespace frar.LobbyServer;
 
 public class RejectedActionException : Exception {
-    String action = "";
+    public String action = "";
+
+    public RejectedActionException() {}
 
     public RejectedActionException(string action) {
         this.action = action;
@@ -21,12 +23,7 @@ public class RejectedActionException : Exception {
     }
 
     public JObject ToJSON() {
-        JObject json = new JObject(
-            new JProperty("event", "action_rejected"),            
-            new JProperty("action", this.action),
-            new JProperty("message", this.Message)
-        );
-        return json;
+        return Events.ActionRejected(this.action, this.Message);
     }
 }
 
@@ -36,4 +33,9 @@ public class UsernameInUseException : RejectedActionException{
 
 public class MalformedActionException : RejectedActionException{
     public MalformedActionException(string action) : base(action, "malformed action") {}
+}
+
+public class GameNameInUseException : RejectedActionException{
+    public GameNameInUseException() : base(action: "", message: "game name already in use") {}
+    public GameNameInUseException(string action) : base(action, "game name already in use") {}
 }

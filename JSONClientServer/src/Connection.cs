@@ -60,7 +60,9 @@ public class Connection {
         try{
             int size = ReadSize();
             String jsonString = ReadString(size);
-            return JObject.Parse(jsonString);
+            if (jsonString != "") return JObject.Parse(jsonString);
+            this.socket.Close();
+            return JObject.Parse("{}");
         } catch (Exception ex){
             throw new ConnectionException("connection exception while reading", ex);
         }
@@ -84,7 +86,9 @@ public class Connection {
     }
 
     public virtual void Close() {
-        socket.Shutdown(SocketShutdown.Both);
-        socket.Close();
+        if (socket != null){
+            socket.Shutdown(SocketShutdown.Both);
+            socket.Close();
+        }
     }
 }

@@ -4,7 +4,6 @@ dotnet build
 To Test (from root)
 dotnet test JSONClientServerTest
 
-
 SQL Databases
 
 use lobby_server;

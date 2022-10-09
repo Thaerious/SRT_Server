@@ -8,6 +8,9 @@ using System.Text.RegularExpressions;
 
 namespace frar.LobbyServer;
 
+/// <summary>
+/// Polls and updates the database for user credentials and information.
+/// </summary>
 public class UserManager {
     public static int SALT_LENGTH = 64;
     public static int REHASH_TIME_MS = 1000;
