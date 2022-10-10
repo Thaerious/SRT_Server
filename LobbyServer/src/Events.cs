@@ -1,5 +1,6 @@
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+namespace frar.LobbyServer;
 
 public class Events {
     public static JObject ActionSuccess(string action) {

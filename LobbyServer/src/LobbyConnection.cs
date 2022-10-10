@@ -187,7 +187,7 @@ public class LobbyConnection {
         }
 
         string gName = (string)jObject["gamename"]!;
-        if (this.connectionManager.lobbyModel.ContainsGame(gName)) {
+        if (this.connectionManager.lobbyModel.HasGame(gName)) {
             throw new GameNameInUseException("create_game");
         }
 

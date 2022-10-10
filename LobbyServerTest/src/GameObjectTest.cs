@@ -5,7 +5,7 @@ using System.Diagnostics;
 namespace LobbyServerTest;
 
 [TestClass]
-public class GameTest {
+public class GameObjectTest {
     [TestMethod]
     public void game_sanity_test() {
         Game game = new Game(
@@ -72,6 +72,24 @@ public class GameTest {
     }
 
     [TestMethod]
+    public void has_player() {
+        Game game = new Game("ima name", "ima owner", "pw", 4);
+        game.AddPlayer("second player", "pw");
+        bool actual = game.HasPlayer("ima owner");
+        bool expected = true;
+        Assert.AreEqual(expected, actual);
+    }
+
+    [TestMethod]
+    public void not_has_player() {
+        Game game = new Game("ima name", "ima owner", "pw", 4);
+        game.AddPlayer("second player", "pw");
+        bool actual = game.HasPlayer("im not the owner");
+        bool expected = false;
+        Assert.AreEqual(expected, actual);
+    }
+
+    [TestMethod]
     [ExpectedException(typeof(GameFullException))]
     public void add_player_full() {
         Game game = new Game("ima name", "ima owner", "pw", 2);
@@ -108,5 +126,5 @@ public class GameTest {
     public void remove_unknown() {
         Game game = new Game("ima name", "ima owner", "pw", 4);
         game.RemovePlayer("second player");
-    }    
+    }
 }

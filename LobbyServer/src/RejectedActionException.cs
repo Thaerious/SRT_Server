@@ -39,3 +39,18 @@ public class GameNameInUseException : RejectedActionException{
     public GameNameInUseException() : base(action: "", message: "game name already in use") {}
     public GameNameInUseException(string action) : base(action, "game name already in use") {}
 }
+
+public class PlayerInGameException : RejectedActionException{
+    public PlayerInGameException() : base(action: "", message: "player is already in a game") {}
+    public PlayerInGameException(string action) : base(action, "player is already in a game") {}
+}
+
+public class UnknownGameException : RejectedActionException{
+    public UnknownGameException() : base(action: "", message: "game not found") {}
+    public UnknownGameException(string action) : base(action, "game not found") {}
+}
+
+public class UnknownPlayerException : RejectedActionException {
+    public UnknownPlayerException(string action, string pName) : base(action: "", message: $"player not found {pName}") {}
+    public UnknownPlayerException(string pName) : base(action: "", message: $"player not found {pName}") {}
+}

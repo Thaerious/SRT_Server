@@ -22,21 +22,24 @@ public class LobbyModel {
     private readonly Dictionary<String, Player> playerNames = new Dictionary<String, Player>();
     private readonly Dictionary<String, Game> gameNames = new Dictionary<String, Game>();
 
-    public ICollection<string> Players{
+    public ICollection<string> Players {
         get {
             return playerNames.Keys;
         }
-        private set {}
+        private set { }
     }
 
-    public ICollection<Game> Games{
-        get; private set;
-    }    
+    public ICollection<Game> Games {
+        get {
+            return gameNames.Values;
+        }
+        private set { }
+    }
 
     // Add a new player to the players list
     // Returns: the player hash.
-    public Player AddPlayer(string name){
-        if (playerNames.ContainsKey(name)){
+    public Player AddPlayer(string name) {
+        if (playerNames.ContainsKey(name)) {
             throw new RejectedActionException("Player name already in use.");
         }
 
@@ -47,25 +50,54 @@ public class LobbyModel {
         return player;
     }
 
-    public void RemovePlayer(string name){
-        if (!playerNames.ContainsKey(name)){
+    public void RemovePlayer(string name) {
+        if (!playerNames.ContainsKey(name)) {
             throw new RejectedActionException("", "Unknown player name.");
         }
 
         playerNames.Remove(name);
     }
 
-    public Game CreateGame(string name, string owner, string password, int maxplayers){
-        if (gameNames.ContainsKey(name)){
-            throw new GameNameInUseException();
-        }        
-        
+    public Game CreateGame(string name, string owner, string password, int maxplayers) {
+        if (this.PlayerHasGame(owner)) throw new PlayerInGameException();
+        if (gameNames.ContainsKey(name)) throw new GameNameInUseException();
+
         Game game = new Game(name, owner, password, maxplayers);
         this.gameNames.Add(name, game);
         return game;
     }
 
-    public bool ContainsGame(string name){
+    /// <summary>
+    /// Retrieve a game, if it exists.
+    /// Throws UnknownGameException if the player is not in a game.
+    /// </summary>
+    /// <param name="pName"></param>
+    /// <returns></returns>
+    public Game GetGameByPlayer(string pName) {
+        if (!this.HasPlayer(pName)) throw new UnknownPlayerException(pName);
+        foreach (Game game in this.Games) {
+            if (game.HasPlayer(pName)) return game;
+        }
+        throw new UnknownGameException();
+    }
+
+    /// <summary>
+    /// True if a player is in a game.
+    /// </summary>
+    /// <param name="pName"></param>
+    /// <returns></returns>
+    public bool PlayerHasGame(string pName) {
+        foreach (Game game in this.Games) {
+            if (game.HasPlayer(pName)) return true;
+        }
+        return false;
+    }
+
+    public bool HasPlayer(string pName) {
+        return this.playerNames.ContainsKey(pName);
+    }
+
+    public bool HasGame(string name) {
         return this.gameNames.ContainsKey(name);
     }
 }
