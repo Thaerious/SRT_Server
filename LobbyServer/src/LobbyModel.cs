@@ -12,15 +12,12 @@ public class Player {
     }
 }
 
-// Data class for storing a game in the LobbyModel
-
-
 // Model for storing the current state of the Lobby.
 // Any exceptions throws should be forwarded as ActionRejected events.
 public class LobbyModel {
     private readonly Dictionary<Guid, Player> playerHashes = new Dictionary<Guid, Player>();
     private readonly Dictionary<String, Player> playerNames = new Dictionary<String, Player>();
-    private readonly Dictionary<String, Game> gameNames = new Dictionary<String, Game>();
+    private readonly Dictionary<String, Game> games = new Dictionary<String, Game>();
 
     public ICollection<string> Players {
         get {
@@ -31,7 +28,7 @@ public class LobbyModel {
 
     public ICollection<Game> Games {
         get {
-            return gameNames.Values;
+            return games.Values;
         }
         private set { }
     }
@@ -60,11 +57,22 @@ public class LobbyModel {
 
     public Game CreateGame(string name, string owner, string password, int maxplayers) {
         if (this.PlayerHasGame(owner)) throw new PlayerInGameException();
-        if (gameNames.ContainsKey(name)) throw new GameNameInUseException();
+        if (games.ContainsKey(name)) throw new GameNameInUseException();
 
         Game game = new Game(name, owner, password, maxplayers);
-        this.gameNames.Add(name, game);
+        this.games.Add(name, game);
         return game;
+    }
+
+    /// <summary>
+    /// Retrieve a game by name.
+    /// </summary>
+    /// <param name="gName">The name of the game.</param>
+    /// <exception cref="UnknownGameException">The game has not been created.</exception> 
+    /// 
+    public Game GetGame(string gName){
+        if (!this.games.ContainsKey(gName)) throw new UnknownGameException();
+        return this.games[gName];
     }
 
     /// <summary>
@@ -73,6 +81,7 @@ public class LobbyModel {
     /// </summary>
     /// <param name="pName"></param>
     /// <returns></returns>
+    /// 
     public Game GetGameByPlayer(string pName) {
         if (!this.HasPlayer(pName)) throw new UnknownPlayerException(pName);
         foreach (Game game in this.Games) {
@@ -98,6 +107,6 @@ public class LobbyModel {
     }
 
     public bool HasGame(string name) {
-        return this.gameNames.ContainsKey(name);
+        return this.games.ContainsKey(name);
     }
 }

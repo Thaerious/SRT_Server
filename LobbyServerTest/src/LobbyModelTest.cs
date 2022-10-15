@@ -1,6 +1,8 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using frar.LobbyServer;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace LobbyServerTest;
 
@@ -117,4 +119,51 @@ public class LobbyModelTest {
         lobbyModel.CreateGame("Adam's Game", "Adam", "password", 2);
         lobbyModel.GetGameByPlayer("Eve");
     }    
+
+    // Retrieving a game by it's name
+    [TestMethod]
+    public void get_game_by_name() {
+        LobbyModel lobbyModel = new LobbyModel();
+        lobbyModel.CreateGame("Adam's Game", "Adam", "password", 2);
+        Game game = lobbyModel.GetGame("Adam's Game");
+        string actual = game.Name;
+        string expected = "Adam's Game";
+        Assert.AreEqual(expected, actual);
+    }        
+
+    // Retrieving a game that doesn't exists throws an exception.
+    [TestMethod]
+    [ExpectedException(typeof(UnknownGameException))]
+    public void get_unknown_game_by_name() {
+        LobbyModel lobbyModel = new LobbyModel();
+        Game game = lobbyModel.GetGame("Adam's Game");
+    }  
+
+    [TestMethod]
+    public void get_all_players() {
+        LobbyModel lobbyModel = new LobbyModel();
+        lobbyModel.AddPlayer("Adam");
+        lobbyModel.AddPlayer("Eve");
+        lobbyModel.AddPlayer("Cain");
+        lobbyModel.AddPlayer("Able");
+        List<string> list = lobbyModel.Players.ToList();
+
+        var actual = list.Count;
+        var expected = 4;
+        Assert.AreEqual(expected, actual);
+    }         
+
+    [TestMethod]
+    public void get_all_games() {
+        LobbyModel lobbyModel = new LobbyModel();
+        lobbyModel.CreateGame("Adam's Game", "Adam", "password", 2);
+        lobbyModel.CreateGame("Eve's Game", "Eve", "password", 2);
+        lobbyModel.CreateGame("Cain's Game", "Cain", "password", 2);
+        lobbyModel.CreateGame("Able's Game", "Able", "password", 2);
+        List<Game> list = lobbyModel.Games.ToList();
+
+        var actual = list.Count;
+        var expected = 4;
+        Assert.AreEqual(expected, actual);
+    }        
 }
