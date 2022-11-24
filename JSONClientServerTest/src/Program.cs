@@ -5,7 +5,7 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using frar.JSONServer;
 
-Server server = new Server().Connect(7000);
+Server<Connection> server = new Server<Connection>().Connect(7000);
 Client client = new Client();
 
 client.Connect(ip: "127.0.0.1", port: 7000);

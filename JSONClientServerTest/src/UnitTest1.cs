@@ -12,7 +12,7 @@ namespace JSONClientServerTest;
 public class UnitTest1 {
     [TestMethod]
     public void SanityTest() {
-        Server server = new Server().Connect(7000);
+        Server<Connection> server = new Server<Connection>().Connect(7000);
 
         Thread thread = new Thread(new ThreadStart(() => {
             Debug.WriteLine("Waiting for Connections");
@@ -31,7 +31,7 @@ public class UnitTest1 {
 
     [TestMethod]
     public void ServerSendToClient() {
-        Server server = new Server().Connect(7000);
+        Server<Connection> server = new Server<Connection>().Connect(7000);
 
         Thread thread = new Thread(new ThreadStart(() => {
             foreach (Connection connection in server.Connections()) {
@@ -49,7 +49,7 @@ public class UnitTest1 {
 
     [TestMethod]
     public void ServerSendToClient2() {
-        Server server = new Server().Connect(7000);
+        Server<Connection> server = new Server<Connection>().Connect(7000);
         Client client = new Client().Connect(ip: "127.0.0.1", port: 7000);
 
         Connection connection = server.AcceptNext();
@@ -66,7 +66,7 @@ public class UnitTest1 {
 
     [TestMethod]
     public void send_jobject_to_client() {
-        Server server = new Server().Connect(7000);
+        Server<Connection> server = new Server<Connection>().Connect(7000);
         Client client = new Client().Connect(ip: "127.0.0.1", port: 7000);
 
         Connection connection = server.AcceptNext();
