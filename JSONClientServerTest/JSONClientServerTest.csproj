@@ -4,6 +4,8 @@
     <TargetFramework>net6.0</TargetFramework>
     <Nullable>enable</Nullable>
     <IsPackable>false</IsPackable>
+    <GenerateProgramFile>false</GenerateProgramFile>
+    <StartupObject>frar.JSONClientServerTest.DemoAttr</StartupObject>
   </PropertyGroup>
 
   <ItemGroup>

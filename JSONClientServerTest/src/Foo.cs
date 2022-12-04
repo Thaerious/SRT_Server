@@ -1,14 +1,9 @@
+namespace frar.JSONClientServerTest;
 
 public class Foo{
-    public int pub = 1;
-    private int pri = 1;
+    public int Bar;
 
-    public Foo(int v){
-        pub = v;
-        pri = 2 * v;
-    }
-
-    public override string ToString(){
-        return "I am foo " + pub + ", " + pri;
+    public Foo(int bar){
+        this.Bar = bar;
     }
 }

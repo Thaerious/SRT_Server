@@ -6,80 +6,47 @@ using System.Diagnostics;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
-namespace JSONClientServerTest;
+namespace frar.JSONClientServerTest;
 
 [TestClass]
 public class UnitTest1 {
+
+    // Run a server, terminate server on first connection.
     [TestMethod]
-    public void SanityTest() {
-        Server<Connection> server = new Server<Connection>().Connect(7000);
-
-        Thread thread = new Thread(new ThreadStart(() => {
-            Debug.WriteLine("Waiting for Connections");
-            foreach (Connection connection in server.Connections()) {
-                Debug.WriteLine("Connection Received");
-                connection.Close();
-                server.Stop();
-            }
-        }));
-
-        thread.Start();
-
-        Debug.WriteLine("new Client");
-        Client client = new Client().Connect();
+    public void Sanity() {
+        Server<CloseTestHnd> server = new Server<CloseTestHnd>();
+        server.Connect(7000);
+        server.Listen();
+        Client client = new Client();
+        server.Close();
     }
 
     [TestMethod]
     public void ServerSendToClient() {
-        Server<Connection> server = new Server<Connection>().Connect(7000);
+        Server<EchoTestHnd> server = new Server<EchoTestHnd>();
+        server.Connect(7000);
+        server.Listen();
+        Client client = new Client(); 
 
-        Thread thread = new Thread(new ThreadStart(() => {
-            foreach (Connection connection in server.Connections()) {
-                connection.WriteJSON(new Foo(3));
-                connection.Close();
-            }
-        }));
+        client.connection.WriteString("a1");
+        client.ReadValue();
 
-        thread.Start();
-        Client client = new Client();
+        Assert.AreEqual(client.lastValue, "a1");
 
-        client.Connect();
-        server.Stop();
+        server.Close();
     }
+}
 
-    [TestMethod]
-    public void ServerSendToClient2() {
-        Server<Connection> server = new Server<Connection>().Connect(7000);
-        Client client = new Client().Connect(ip: "127.0.0.1", port: 7000);
-
-        Connection connection = server.AcceptNext();
-        connection.WriteJSON(new Foo(3));
-        JObject jObject = client.ReadJSON();
-
-        Foo foo = jObject.ToObject<Foo>();
-
-        server.Stop();
+class CloseTestHnd : ConnectionHnd{
+    public void OnConnect(Connection connection){
         connection.Close();
-
-        Assert.AreEqual(foo.ToString(), "I am foo 3, 0");
     }
+}
 
-    [TestMethod]
-    public void send_jobject_to_client() {
-        Server<Connection> server = new Server<Connection>().Connect(7000);
-        Client client = new Client().Connect(ip: "127.0.0.1", port: 7000);
-
-        Connection connection = server.AcceptNext();
-        JObject source = new JObject(
-            new JProperty("pub", 4)
-        );
-
-        connection.WriteJSON(source);
-        JObject dest = client.ReadJSON();
-
-        server.Stop();
+class EchoTestHnd : ConnectionHnd{
+    public void OnConnect(Connection connection){
+        string read = connection.ReadString();
+        connection.WriteString(read);
         connection.Close();
-
-        Assert.AreEqual(dest.ToString(Formatting.None), "{\"pub\":4}");
-    }      
+    }
 }
