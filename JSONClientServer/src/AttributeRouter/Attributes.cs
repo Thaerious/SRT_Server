@@ -2,9 +2,8 @@ using System.Reflection;
 
 namespace frar.JSONServer;
 
-public class Connect : Attribute {
-
-}
+[AttributeUsage(AttributeTargets.Method)]
+public class OnConnect : Attribute {}
 
 [AttributeUsage(AttributeTargets.Parameter)]
 public class Req : Attribute {}

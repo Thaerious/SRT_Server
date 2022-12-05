@@ -1,11 +1,10 @@
 using System.Reflection;
 using System.Text.RegularExpressions;
-using frar.JSONServer;
 using Newtonsoft.Json.Linq;
 
 namespace frar.JSONServer;
 
-public class AttributeRouter : ThreadedConnectionHandler {
+public class AttributeRouter : ThreadedConnHnd {
     public static readonly String ACTION_FIELD = "action";
     private bool initialized = false;
     private List<RouteEntry> routes;
@@ -25,11 +24,15 @@ public class AttributeRouter : ThreadedConnectionHandler {
     public override void OnConnect(Connection connection) {
         base.OnConnect(connection);
         this.Initialize();
+        
+        foreach(MethodInfo method in AttributeParser.SeekOnConnect(this)){
+            method.Invoke(this, new object[]{connection});
+        }
     }
 
     public void Initialize() {
         if (initialized) return;
-        this.routes = AttributeParser.SeekAttributes(this);
+        this.routes = AttributeParser.SeekRoutes(this);
         this.initialized = true;
     }
 

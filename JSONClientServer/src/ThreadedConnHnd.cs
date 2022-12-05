@@ -2,7 +2,7 @@ using Newtonsoft.Json.Linq;
 namespace frar.JSONServer;
 
 // Creates and starts a new thread when a new connection takes places.
-public abstract class ThreadedConnectionHandler : ConnectionHnd {
+public abstract class ThreadedConnHnd : ConnectionHnd {
     private Thread thread = null!;
     private bool isRunning = true;
 

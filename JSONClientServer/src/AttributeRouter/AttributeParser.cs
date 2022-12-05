@@ -18,10 +18,23 @@ public class RouteEntry {
     }
 }
 
-public class AttributeParser {
-    public static List<RouteEntry> SeekAttributes(Object target) {
-        List<RouteEntry> routeList = new List<RouteEntry>();
+class AttributeParser {
 
+    public static List<MethodInfo> SeekOnConnect(Object target) {
+        List<MethodInfo> methodList = new List<MethodInfo>();
+        Type type = target.GetType();
+        MethodInfo[] methodInfos = type.GetMethods();
+
+        foreach (MethodInfo methodInfo in methodInfos) {
+            OnConnect? onConnect = methodInfo.GetCustomAttribute<OnConnect>();
+            if (onConnect != null) methodList.Add(methodInfo);
+        }
+
+        return methodList;
+    }
+
+    public static List<RouteEntry> SeekRoutes(Object target) {
+        List<RouteEntry> routeList = new List<RouteEntry>();
         Type type = target.GetType();
         MethodInfo[] methodInfos = type.GetMethods();
 
