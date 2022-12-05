@@ -1,0 +1,7 @@
+{
+    "editor.defaultFormatter": "SimonSiefke.prettier-vscode",
+    "[csharp]": {
+        "editor.defaultFormatter": "ms-dotnettools.csharp"
+    },
+    "editor.acceptSuggestionOnCommitCharacter": false
+}

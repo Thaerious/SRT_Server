@@ -41,8 +41,8 @@ public class LobbyServer {
     /// <summary>
     /// Stop listening for new connections and shut down the underlying server.
     /// </summary>
-    public void Stop() {
+    public void Close() {
         this.isRunning = false;
-        this.server.Stop();
+        this.server.Close();
     }
 }

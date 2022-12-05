@@ -43,7 +43,7 @@ public class LobbyConnection {
         thread.Start();
     }
 
-    public void Stop() {
+    public void Close() {
 #pragma warning disable CS0168
         try {
             this.isRunning = false;
@@ -91,7 +91,7 @@ public class LobbyConnection {
                 case "remove_player":
                     this.RemovePlayer(jObject);
                     break;
-                case "start_bame":
+                case "start_game":
                     this.StartGame(jObject);
                     break;
                 case "chat":

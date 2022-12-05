@@ -17,22 +17,74 @@ public class LobbyModelTest {
     public void added_player_has_correct_name() {
         LobbyModel lobbyModel = new LobbyModel();
         Player player = lobbyModel.AddPlayer("Adam");
-        Assert.AreEqual(player.name, "Adam");
+        Assert.AreEqual(player.Name, "Adam");
     }
 
     [TestMethod]
+    [ExpectedException(typeof(RejectedActionException))]
     public void adding_same_name_twice_exception() {
         LobbyModel lobbyModel = new LobbyModel();
-        Player player = lobbyModel.AddPlayer("Adam");
-        Assert.ThrowsException<RejectedActionException>(() => {
-            Player player = lobbyModel.AddPlayer("Adam");
-        });
+        lobbyModel.AddPlayer("Adam");
+        lobbyModel.AddPlayer("Adam");
+    }
+
+    [TestMethod]
+    [ExpectedException(typeof(UnknownPlayerException))]
+    public void create_game_unknown_player() {
+        LobbyModel lobbyModel = new LobbyModel();
+        lobbyModel.CreateGame("Adam's Game", "Adam", "password", 4);
     }
 
     [TestMethod]
     public void create_game_sanity() {
         LobbyModel lobbyModel = new LobbyModel();
+        lobbyModel.AddPlayer("Adam");
         lobbyModel.CreateGame("Adam's Game", "Adam", "password", 4);
+    }
+
+    [TestMethod]
+    public void add_invited_player() {
+        LobbyModel lobbyModel = new LobbyModel();
+        lobbyModel.AddPlayer("Adam");
+        var eve = lobbyModel.AddPlayer("Eve");
+        var game = lobbyModel.CreateGame("Adam's Game", "Adam", "password", 4);
+        game.AddInvite(eve.Name);
+
+        Assert.IsTrue(game.AddPlayer("Eve"));
+    }
+
+    [TestMethod]
+    [ExpectedException(typeof(RepeatedPlayerException))]
+    public void add_invited_player_twice() {
+        LobbyModel lobbyModel = new LobbyModel();
+        lobbyModel.AddPlayer("Adam");
+        var eve = lobbyModel.AddPlayer("Eve");
+        var game = lobbyModel.CreateGame("Adam's Game", "Adam", "password", 4);
+        game.AddInvite(eve.Name);
+        game.AddInvite(eve.Name);
+    }
+
+    [TestMethod]
+    public void uninvite_player() {
+        LobbyModel lobbyModel = new LobbyModel();
+        lobbyModel.AddPlayer("Adam");
+        var eve = lobbyModel.AddPlayer("Eve");
+        var game = lobbyModel.CreateGame("Adam's Game", "Adam", "password", 4);
+        game.AddInvite(eve.Name);
+        game.RemoveInvite(eve.Name);
+
+        Assert.IsFalse(game.AddPlayer("Eve"));
+    }
+
+    [TestMethod]
+    [ExpectedException(typeof(UnknownPlayerException))]
+    public void uninvite_unknown_player() {
+        LobbyModel lobbyModel = new LobbyModel();
+        lobbyModel.AddPlayer("Adam");
+        var game = lobbyModel.CreateGame("Adam's Game", "Adam", "password", 4);
+        game.RemoveInvite("Eve");
+
+        Assert.IsFalse(game.AddPlayer("Eve"));
     }
 
     // The lobby can not have repeated game names.
@@ -40,6 +92,8 @@ public class LobbyModelTest {
     [ExpectedException(typeof(GameNameInUseException))]
     public void create_game_same_name() {
         LobbyModel lobbyModel = new LobbyModel();
+        lobbyModel.AddPlayer("Adam");
+        lobbyModel.AddPlayer("Eve");
         lobbyModel.CreateGame("Game Name", "Adam", "password", 4);
         lobbyModel.CreateGame("Game Name", "Eve", "password", 4);
     }
@@ -49,6 +103,7 @@ public class LobbyModelTest {
     [ExpectedException(typeof(PlayerInGameException))]
     public void create_game_same_owner() {
         LobbyModel lobbyModel = new LobbyModel();
+        lobbyModel.AddPlayer("Adam");
         lobbyModel.CreateGame("Adam's Game", "Adam", "password", 4);
         lobbyModel.CreateGame("Adam's Other Game", "Adam", "password", 4);
     }
@@ -58,6 +113,7 @@ public class LobbyModelTest {
     [ExpectedException(typeof(MaxPlayersException))]
     public void too_few_players() {
         LobbyModel lobbyModel = new LobbyModel();
+        lobbyModel.AddPlayer("Adam");
         lobbyModel.CreateGame("Adam's Game", "Adam", "password", 1);
     }
 
@@ -66,6 +122,7 @@ public class LobbyModelTest {
     [ExpectedException(typeof(MaxPlayersException))]
     public void too_many_players() {
         LobbyModel lobbyModel = new LobbyModel();
+        lobbyModel.AddPlayer("Adam");
         lobbyModel.CreateGame("Adam's Game", "Adam", "password", 6);
     }
 
@@ -73,6 +130,7 @@ public class LobbyModelTest {
     [TestMethod]
     public void player_count_min() {
         LobbyModel lobbyModel = new LobbyModel();
+        lobbyModel.AddPlayer("Adam");
         lobbyModel.CreateGame("Adam's Game", "Adam", "password", 2);
 
         bool actual = lobbyModel.PlayerHasGame("Adam");
@@ -84,6 +142,7 @@ public class LobbyModelTest {
     [TestMethod]
     public void player_count_max() {
         LobbyModel lobbyModel = new LobbyModel();
+        lobbyModel.AddPlayer("Adam");
         lobbyModel.CreateGame("Adam's Game", "Adam", "password", 5);
 
         bool actual = lobbyModel.PlayerHasGame("Adam");
@@ -94,6 +153,7 @@ public class LobbyModelTest {
     [TestMethod]
     public void contains_game_true() {
         LobbyModel lobbyModel = new LobbyModel();
+        lobbyModel.AddPlayer("Adam");
         lobbyModel.CreateGame("Adam's Game", "Adam", "password", 5);
 
         bool actual = lobbyModel.HasGame("Adam's Game");
@@ -104,6 +164,7 @@ public class LobbyModelTest {
     [TestMethod]
     public void contains_game_false() {
         LobbyModel lobbyModel = new LobbyModel();
+        lobbyModel.AddPlayer("Adam");
         lobbyModel.CreateGame("Adam's Game", "Adam", "password", 5);
 
         bool actual = lobbyModel.HasGame("Eve's Game");
@@ -116,20 +177,45 @@ public class LobbyModelTest {
     [ExpectedException(typeof(UnknownPlayerException))]
     public void get_game_by_unknown_player() {
         LobbyModel lobbyModel = new LobbyModel();
+        lobbyModel.AddPlayer("Adam");
         lobbyModel.CreateGame("Adam's Game", "Adam", "password", 2);
         lobbyModel.GetGameByPlayer("Eve");
-    }    
+    }
+
+    // Retrieving a game by a player that is not in a game throws an exception.
+    [TestMethod]
+    [ExpectedException(typeof(UnknownGameException))]
+    public void get_game_by_player_not_in_game() {
+        LobbyModel lobbyModel = new LobbyModel();
+        lobbyModel.AddPlayer("Adam");
+        lobbyModel.AddPlayer("Eve");
+        lobbyModel.CreateGame("Adam's Game", "Adam", "password", 2);
+        lobbyModel.GetGameByPlayer("Eve");
+    }
+
+    // Retrieve a game with an known player returns a valid game.
+    [TestMethod]
+    public void get_game_by_player() {
+        LobbyModel lobbyModel = new LobbyModel();
+        lobbyModel.AddPlayer("Adam");
+        lobbyModel.CreateGame("Adam's Game", "Adam", "password", 2);
+        var game = lobbyModel.GetGameByPlayer("Adam");
+        var actual = game.Name;
+        var expected = "Adam's Game";
+        Assert.AreEqual(expected, actual);
+    }
 
     // Retrieving a game by it's name
     [TestMethod]
     public void get_game_by_name() {
         LobbyModel lobbyModel = new LobbyModel();
+        lobbyModel.AddPlayer("Adam");
         lobbyModel.CreateGame("Adam's Game", "Adam", "password", 2);
         Game game = lobbyModel.GetGame("Adam's Game");
         string actual = game.Name;
         string expected = "Adam's Game";
         Assert.AreEqual(expected, actual);
-    }        
+    }
 
     // Retrieving a game that doesn't exists throws an exception.
     [TestMethod]
@@ -137,7 +223,7 @@ public class LobbyModelTest {
     public void get_unknown_game_by_name() {
         LobbyModel lobbyModel = new LobbyModel();
         Game game = lobbyModel.GetGame("Adam's Game");
-    }  
+    }
 
     [TestMethod]
     public void get_all_players() {
@@ -151,11 +237,15 @@ public class LobbyModelTest {
         var actual = list.Count;
         var expected = 4;
         Assert.AreEqual(expected, actual);
-    }         
+    }
 
     [TestMethod]
     public void get_all_games() {
         LobbyModel lobbyModel = new LobbyModel();
+        lobbyModel.AddPlayer("Adam");
+        lobbyModel.AddPlayer("Eve");
+        lobbyModel.AddPlayer("Cain");
+        lobbyModel.AddPlayer("Able");
         lobbyModel.CreateGame("Adam's Game", "Adam", "password", 2);
         lobbyModel.CreateGame("Eve's Game", "Eve", "password", 2);
         lobbyModel.CreateGame("Cain's Game", "Cain", "password", 2);
@@ -165,5 +255,59 @@ public class LobbyModelTest {
         var actual = list.Count;
         var expected = 4;
         Assert.AreEqual(expected, actual);
-    }        
+    }
+
+    [TestMethod]
+    public void remove_existing_player_from_lobby() {
+        LobbyModel lobbyModel = new LobbyModel();
+        lobbyModel.AddPlayer("Adam");
+        lobbyModel.RemovePlayer("Adam");
+        var actual = lobbyModel.HasPlayer("Adam");
+
+        Assert.IsFalse(actual);
+    }
+
+
+    [TestMethod]
+    [ExpectedException(typeof(UnknownPlayerException))]
+    public void remove_unknown_player_from_lobby() {
+        LobbyModel lobbyModel = new LobbyModel();
+        lobbyModel.AddPlayer("Adam");
+        lobbyModel.RemovePlayer("Steve");
+    }
+
+    [TestMethod]
+    public void has_player_true() {
+        LobbyModel lobbyModel = new LobbyModel();
+        lobbyModel.AddPlayer("Adam");
+        var actual = lobbyModel.HasPlayer("Adam");
+
+        Assert.IsTrue(actual);
+    }
+
+    [TestMethod]
+    public void has_player_false() {
+        LobbyModel lobbyModel = new LobbyModel();
+        var actual = lobbyModel.HasPlayer("Adam");
+
+        Assert.IsFalse(actual);
+    }
+
+    [TestMethod]
+    public void has_game_true() {
+        LobbyModel lobbyModel = new LobbyModel();
+        lobbyModel.AddPlayer("Adam");
+        lobbyModel.CreateGame("Adam's Game", "Adam", "password", 2);
+        var actual = lobbyModel.HasGame("Adam's Game");
+
+        Assert.IsTrue(actual);
+    }
+
+    [TestMethod]
+    public void has_game_false() {
+        LobbyModel lobbyModel = new LobbyModel();
+        var actual = lobbyModel.HasGame("Adam's Game");
+
+        Assert.IsFalse(actual);
+    }
 }

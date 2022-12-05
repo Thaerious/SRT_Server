@@ -2,20 +2,16 @@ namespace frar.LobbyServer;
 
 // Data class for storing a player in the LobbyModel
 public class Player {
-    public readonly string name;
-    public readonly Guid playerhash;
-    public string gamehash = "";
+    public readonly string Name;
 
-    public Player(string name, Guid playerhash) {
-        this.name = name;
-        this.playerhash = playerhash;
+    public Player(string name) {
+        this.Name = name;
     }
 }
 
 // Model for storing the current state of the Lobby.
 // Any exceptions throws should be forwarded as ActionRejected events.
 public class LobbyModel {
-    private readonly Dictionary<Guid, Player> playerHashes = new Dictionary<Guid, Player>();
     private readonly Dictionary<String, Player> playerNames = new Dictionary<String, Player>();
     private readonly Dictionary<String, Game> games = new Dictionary<String, Game>();
 
@@ -23,14 +19,12 @@ public class LobbyModel {
         get {
             return playerNames.Keys;
         }
-        private set { }
     }
 
     public ICollection<Game> Games {
         get {
             return games.Values;
         }
-        private set { }
     }
 
     // Add a new player to the players list
@@ -40,27 +34,32 @@ public class LobbyModel {
             throw new RejectedActionException("Player name already in use.");
         }
 
-        Player player = new Player(name, Guid.NewGuid());
-        playerHashes.Add(player.playerhash, player);
-        playerNames.Add(player.name, player);
+        Player player = new Player(name);
+        playerNames.Add(player.Name, player);
 
         return player;
     }
 
+    /// <summary>
+    /// Remove a player from the lobby.
+    /// </summary>
+    /// <param name="name">The name of the player to remove</param>
+    /// <exception cref="UnknownPlayerException">Thrown when the player does not exist.</exception>
     public void RemovePlayer(string name) {
         if (!playerNames.ContainsKey(name)) {
-            throw new RejectedActionException("", "Unknown player name.");
+            throw new UnknownPlayerException(name);
         }
 
         playerNames.Remove(name);
     }
 
-    public Game CreateGame(string name, string owner, string password, int maxplayers) {
-        if (this.PlayerHasGame(owner)) throw new PlayerInGameException();
-        if (games.ContainsKey(name)) throw new GameNameInUseException();
+    public Game CreateGame(string gName, string pName, string password, int maxplayers) {
+        if (!this.HasPlayer(pName)) throw new UnknownPlayerException(pName);
+        if (this.PlayerHasGame(pName)) throw new PlayerInGameException();
+        if (games.ContainsKey(gName)) throw new GameNameInUseException();
 
-        Game game = new Game(name, owner, password, maxplayers);
-        this.games.Add(name, game);
+        Game game = new Game(gName, pName, password, maxplayers);
+        this.games.Add(gName, game);
         return game;
     }
 
@@ -70,7 +69,7 @@ public class LobbyModel {
     /// <param name="gName">The name of the game.</param>
     /// <exception cref="UnknownGameException">The game has not been created.</exception> 
     /// 
-    public Game GetGame(string gName){
+    public Game GetGame(string gName) {
         if (!this.games.ContainsKey(gName)) throw new UnknownGameException();
         return this.games[gName];
     }

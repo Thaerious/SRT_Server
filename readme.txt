@@ -15,3 +15,5 @@ CREATE TABLE users (
     email varchar(128), 
     status varchar(32)
 );
+
+sudo service mysql start

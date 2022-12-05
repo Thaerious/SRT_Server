@@ -4,13 +4,13 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 namespace frar.JSONServer;
 
+// Read and write json objects from/to a socket.
+// The connection class is generated from the server Connections() iterator.
 public class Connection {
     public static readonly int BUFFER_SIZE = 4096;
     public static readonly int INT_BUFFER_SIZE = 4;
 
-    public Socket socket {
-        get; protected set;
-    } = null!;
+    public readonly Socket socket;
 
     public bool Connected{
         get {
@@ -19,9 +19,7 @@ public class Connection {
         }
     }
 
-    protected Connection(){}
-
-    public Connection(Socket socket) {
+    public Connection(Socket socket){
         this.socket = socket;
     }
 
@@ -51,11 +49,13 @@ public class Connection {
         return Encoding.ASCII.GetString(bytes, 0, size);
     }
 
+    // Read the next string from the socket.
     public String ReadString(){
         int size = ReadSize();
         return ReadString(size);        
     }
 
+    // Read the next JSON object from the socket.
     public JObject ReadJSON() {
         try{
             int size = ReadSize();
@@ -68,6 +68,7 @@ public class Connection {
         }
     }
 
+    // Write a string on to the socket.
     public void WriteString(string aString) {
         byte[] msg = Encoding.ASCII.GetBytes(aString);
         byte[] len = BitConverter.GetBytes(msg.Length);
@@ -75,16 +76,19 @@ public class Connection {
         this.socket.Send(msg);
     }
 
+    // Write a JSON object on to the socket.
     public void WriteJSON(JObject jObject){
         String jString = jObject.ToString();
         this.WriteString(jString);
     }
 
+    // Write a JSON object on to the socket.
     public void WriteJSON(Object anObject){
         String jString = JsonConvert.SerializeObject(anObject);
         this.WriteString(jString);
     }
 
+    // Terminate this connection.
     public virtual void Close() {
         if (socket != null){
             socket.Shutdown(SocketShutdown.Both);
