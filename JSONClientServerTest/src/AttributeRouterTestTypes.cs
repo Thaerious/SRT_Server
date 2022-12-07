@@ -3,13 +3,11 @@ using frar.JSONServer;
 using System.Net;
 using System.Threading;
 using System.Diagnostics;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
 
 namespace frar.JSONClientServerTest;
 
 [TestClass]
-public class TestTypes : AttributeRouter {
+public class TestTypes : ThreadedAttributeRouter {
     public string isString = "";
     public bool isBool = false;
     public byte isByte = 0;
@@ -27,20 +25,16 @@ public class TestTypes : AttributeRouter {
     public short isShort = 0;
     public ushort isUShort = 0;
 
-    public TestTypes() {
-        this.Initialize();
-    }
-
     // Invokes an action with a single string parameter.
     // The method uses a default route, case-insenstive full match.
     [TestMethod]
     public void String_Parameter() {
-        this.Process(@"{
-            'action' : 'setstring',
-            'parameters' : {
+        this.Process(Packet.FromString(@"{
+            'Action' : 'setstring',
+            'Parameters' : {
                 'value' : 'the_value'
             }
-        }");
+        }"));
 
         Assert.AreEqual("the_value", this.isString);
     }
@@ -50,12 +44,12 @@ public class TestTypes : AttributeRouter {
     [TestMethod]
     public void Byte_Parameter() {
         this.isByte = 0;
-        this.Process(@"{
-            'action' : 'setbyte',
-            'parameters' : {
+        this.Process(Packet.FromString(@"{
+            'Action' : 'setbyte',
+            'Parameters' : {
                 'value' : 7
             }
-        }");
+        }"));
 
         Assert.AreEqual(7, this.isByte);
     }
@@ -66,12 +60,12 @@ public class TestTypes : AttributeRouter {
     [TestMethod]
     public void String_as_Byte_Parameter() {
         this.isByte = 0;
-        this.Process(@"{
-            'action' : 'setbyte',
-            'parameters' : {
+        this.Process(Packet.FromString(@"{
+            'Action' : 'setbyte',
+            'Parameters' : {
                 'value' : '7'
             }
-        }");
+        }"));
 
         Assert.AreEqual(7, this.isByte);
     }
@@ -82,12 +76,12 @@ public class TestTypes : AttributeRouter {
     [TestMethod]
     public void SByte_Parameter() {
         this.isSByte = 0;
-        this.Process(@"{
-            'action' : 'setsbyte',
-            'parameters' : {
+        this.Process(Packet.FromString(@"{
+            'Action' : 'setsbyte',
+            'Parameters' : {
                 'value' : -7
             }
-        }");
+        }"));
 
         Assert.AreEqual(-7, this.isSByte);
     }
@@ -98,12 +92,12 @@ public class TestTypes : AttributeRouter {
     [TestMethod]
     public void String_as_SByte_Parameter() {
         this.isSByte = 0;
-        this.Process(@"{
-            'action' : 'setsbyte',
-            'parameters' : {
+        this.Process(Packet.FromString(@"{
+            'Action' : 'setsbyte',
+            'Parameters' : {
                 'value' : '-7'
             }
-        }");
+        }"));
 
         Assert.AreEqual(-7, this.isSByte);
     }
@@ -113,12 +107,12 @@ public class TestTypes : AttributeRouter {
     [TestMethod]
     public void Char_Parameter() {
         this.isChar = 'a';
-        this.Process(@"{
-            'action' : 'setchar',
-            'parameters' : {
+        this.Process(Packet.FromString(@"{
+            'Action' : 'setchar',
+            'Parameters' : {
                 'value' : 'b'
             }
-        }");
+        }"));
 
         Assert.AreEqual('b', this.isChar);
     }
@@ -128,12 +122,12 @@ public class TestTypes : AttributeRouter {
     [TestMethod]
     public void Decimal_Parameter() {
         this.isDecimal = 0.0M;
-        this.Process(@"{
-            'action' : 'setdecimal',
-            'parameters' : {
+        this.Process(Packet.FromString(@"{
+            'Action' : 'setdecimal',
+            'Parameters' : {
                 'value' : 5.6
             }
-        }");
+        }"));
 
         Assert.AreEqual(5.6M, this.isDecimal);
     }
@@ -144,12 +138,12 @@ public class TestTypes : AttributeRouter {
     [TestMethod]
     public void String_as_Decimal_Parameter() {
         this.isDecimal = 0.0M;
-        this.Process(@"{
-            'action' : 'setdecimal',
-            'parameters' : {
+        this.Process(Packet.FromString(@"{
+            'Action' : 'setdecimal',
+            'Parameters' : {
                 'value' : '5.6'
             }
-        }");
+        }"));
 
         Assert.AreEqual(5.6M, this.isDecimal);
     }
@@ -159,12 +153,12 @@ public class TestTypes : AttributeRouter {
     [TestMethod]
     public void Float_Parameter() {
         this.isFloat = 0.0F;
-        this.Process(@"{
-            'action' : 'setFloat',
-            'parameters' : {
+        this.Process(Packet.FromString(@"{
+            'Action' : 'setFloat',
+            'Parameters' : {
                 'value' : 5.6
             }
-        }");
+        }"));
 
         Assert.AreEqual(5.6F, this.isFloat);
     }
@@ -175,12 +169,12 @@ public class TestTypes : AttributeRouter {
     [TestMethod]
     public void String_as_Float_Parameter() {
         this.isFloat = 0.0F;
-        this.Process(@"{
-            'action' : 'setFloat',
-            'parameters' : {
+        this.Process(Packet.FromString(@"{
+            'Action' : 'setFloat',
+            'Parameters' : {
                 'value' : '5.6'
             }
-        }");
+        }"));
 
         Assert.AreEqual(5.6F, this.isFloat);
     }
@@ -190,12 +184,12 @@ public class TestTypes : AttributeRouter {
     [TestMethod]
     public void Integer_Parameter() {
         this.isInt = 0;
-        this.Process(@"{
-            'action' : 'setint',
-            'parameters' : {
+        this.Process(Packet.FromString(@"{
+            'Action' : 'setint',
+            'Parameters' : {
                 'value' : 3
             }
-        }");
+        }"));
 
         Assert.AreEqual(3, this.isInt);
     }
@@ -206,12 +200,12 @@ public class TestTypes : AttributeRouter {
     [TestMethod]
     public void String_as_Integer_Parameter() {
         this.isInt = 0;
-        this.Process(@"{
-            'action' : 'setint',
-            'parameters' : {
+        this.Process(Packet.FromString(@"{
+            'Action' : 'setint',
+            'Parameters' : {
                 'value' : '3'
             }
-        }");
+        }"));
 
         Assert.AreEqual(3, this.isInt);
     }
@@ -221,12 +215,12 @@ public class TestTypes : AttributeRouter {
     [TestMethod]
     public void Unsigned_Integer_Parameter() {
         this.isUInt = 0;
-        this.Process(@"{
-            'action' : 'setuint',
-            'parameters' : {
+        this.Process(Packet.FromString(@"{
+            'Action' : 'setuint',
+            'Parameters' : {
                 'value' : 7
             }
-        }");
+        }"));
 
         Assert.AreEqual((uint)7, this.isUInt);
     }
@@ -237,12 +231,12 @@ public class TestTypes : AttributeRouter {
     [TestMethod]
     public void String_as_Unsigned_Integer_Parameter() {
         this.isUInt = 0;
-        this.Process(@"{
-            'action' : 'setuint',
-            'parameters' : {
+        this.Process(Packet.FromString(@"{
+            'Action' : 'setuint',
+            'Parameters' : {
                 'value' : '7'
             }
-        }");
+        }"));
 
         Assert.AreEqual((uint)7, this.isUInt);
     }
@@ -253,12 +247,12 @@ public class TestTypes : AttributeRouter {
     [TestMethod]
     public void Long_Parameter() {
         this.isLong = 0;
-        this.Process(@"{
-            'action' : 'setlong',
-            'parameters' : {
+        this.Process(Packet.FromString(@"{
+            'Action' : 'setlong',
+            'Parameters' : {
                 'value' : 7
             }
-        }");
+        }"));
 
         Assert.AreEqual(7, this.isLong);
     }
@@ -269,12 +263,12 @@ public class TestTypes : AttributeRouter {
     [TestMethod]
     public void String_as_Long_Parameter() {
         this.isLong = 0;
-        this.Process(@"{
-            'action' : 'setlong',
-            'parameters' : {
+        this.Process(Packet.FromString(@"{
+            'Action' : 'setlong',
+            'Parameters' : {
                 'value' : '7'
             }
-        }");
+        }"));
 
         Assert.AreEqual(7, this.isLong);
     }
@@ -284,12 +278,12 @@ public class TestTypes : AttributeRouter {
     [TestMethod]
     public void Unsigned_Long_Parameter() {
         this.isULong = 0;
-        this.Process(@"{
-            'action' : 'setulong',
-            'parameters' : {
+        this.Process(Packet.FromString(@"{
+            'Action' : 'setulong',
+            'Parameters' : {
                 'value' : 9
             }
-        }");
+        }"));
 
         Assert.AreEqual((ulong)9, this.isULong);
     }
@@ -300,12 +294,12 @@ public class TestTypes : AttributeRouter {
     [TestMethod]
     public void String_as_Unsigned_Long_Parameter() {
         this.isULong = 0;
-        this.Process(@"{
-            'action' : 'setulong',
-            'parameters' : {
+        this.Process(Packet.FromString(@"{
+            'Action' : 'setulong',
+            'Parameters' : {
                 'value' : '9'
             }
-        }");
+        }"));
 
         Assert.AreEqual((ulong)9, this.isULong);
     }
@@ -315,20 +309,20 @@ public class TestTypes : AttributeRouter {
     [TestMethod]
     public void Bool_Parameter() {
         this.isBool = false;
-        this.Process(@"{
-            'action' : 'setbool',
-            'parameters' : {
+        this.Process(Packet.FromString(@"{
+            'Action' : 'setbool',
+            'Parameters' : {
                 'value' : true
             }
-        }");
+        }"));
         Assert.AreEqual(true, this.isBool);
 
-        this.Process(@"{
-            'action' : 'setbool',
-            'parameters' : {
+        this.Process(Packet.FromString(@"{
+            'Action' : 'setbool',
+            'Parameters' : {
                 'value' : false
             }
-        }");
+        }"));
         Assert.AreEqual(false, this.isBool);
     }
 
@@ -338,12 +332,12 @@ public class TestTypes : AttributeRouter {
     [TestMethod]
     public void String_as_Bool_Parameter() {
         this.isBool = false;
-        this.Process(@"{
-            'action' : 'setbool',
-            'parameters' : {
+        this.Process(Packet.FromString(@"{
+            'Action' : 'setbool',
+            'Parameters' : {
                 'value' : 'true'
             }
-        }");
+        }"));
         Assert.AreEqual(true, this.isBool);
     }
 
@@ -352,12 +346,12 @@ public class TestTypes : AttributeRouter {
     [TestMethod]
     public void Short_Parameter() {
         this.isShort = 0;
-        this.Process(@"{
-            'action' : 'setShort',
-            'parameters' : {
+        this.Process(Packet.FromString(@"{
+            'Action' : 'setShort',
+            'Parameters' : {
                 'value' : 7
             }
-        }");
+        }"));
 
         Assert.AreEqual((short)7, this.isShort);
     }
@@ -368,12 +362,12 @@ public class TestTypes : AttributeRouter {
     [TestMethod]
     public void String_as_Short_Parameter() {
         this.isShort = 0;
-        this.Process(@"{
-            'action' : 'setShort',
-            'parameters' : {
+        this.Process(Packet.FromString(@"{
+            'Action' : 'setShort',
+            'Parameters' : {
                 'value' : '7'
             }
-        }");
+        }"));
 
         Assert.AreEqual((short)7, this.isShort);
     }
@@ -383,12 +377,12 @@ public class TestTypes : AttributeRouter {
     [TestMethod]
     public void Unsigned_Short_Parameter() {
         this.isUShort = 0;
-        this.Process(@"{
-            'action' : 'setuShort',
-            'parameters' : {
+        this.Process(Packet.FromString(@"{
+            'Action' : 'setuShort',
+            'Parameters' : {
                 'value' : 9
             }
-        }");
+        }"));
 
         Assert.AreEqual((ushort)9, this.isUShort);
     }
@@ -399,12 +393,12 @@ public class TestTypes : AttributeRouter {
     [TestMethod]
     public void String_as_Unsigned_Short_Parameter() {
         this.isUShort = 0;
-        this.Process(@"{
-            'action' : 'setuShort',
-            'parameters' : {
+        this.Process(Packet.FromString(@"{
+            'Action' : 'setuShort',
+            'Parameters' : {
                 'value' : '9'
             }
-        }");
+        }"));
 
         Assert.AreEqual((ushort)9, this.isUShort);
     }

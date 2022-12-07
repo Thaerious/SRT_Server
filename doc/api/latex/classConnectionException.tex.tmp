@@ -1,0 +1,34 @@
+\hypertarget{classConnectionException}{}\doxysection{Connection\+Exception Class Reference}
+\label{classConnectionException}\index{ConnectionException@{ConnectionException}}
+
+
+Thrown by the \mbox{\hyperlink{classConnection}{Connection}} class.  
+
+
+
+
+Inheritance diagram for Connection\+Exception\+:
+% FIG 0
+
+
+Collaboration diagram for Connection\+Exception\+:
+% FIG 1
+\doxysubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{classConnectionException_adb0acbc7004c6214c058bfeaef59774f}\label{classConnectionException_adb0acbc7004c6214c058bfeaef59774f}} 
+{\bfseries Connection\+Exception} (string message)
+\item 
+\mbox{\Hypertarget{classConnectionException_abc6a5f9811ba73ff6bf37196eac42247}\label{classConnectionException_abc6a5f9811ba73ff6bf37196eac42247}} 
+{\bfseries Connection\+Exception} (string message, Exception inner)
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Thrown by the \mbox{\hyperlink{classConnection}{Connection}} class. 
+
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+src/Connection\+Exception.\+cs\end{DoxyCompactItemize}

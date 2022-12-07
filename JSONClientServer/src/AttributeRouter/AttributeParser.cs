@@ -2,6 +2,10 @@ using System.Reflection;
 
 namespace frar.JSONServer;
 
+/// <summary>
+/// Data class for recording methods marked by the Route annotation.
+/// Used by AttributeParser.
+/// </summary>
 public class RouteEntry {
     public readonly MethodInfo MethodInfo;
     public readonly string Rule;
@@ -18,6 +22,9 @@ public class RouteEntry {
     }
 }
 
+/// <summary>
+/// Parses attributes from a class for use in routers.
+/// </summary>
 class AttributeParser {
 
     public static List<MethodInfo> SeekOnConnect(Object target) {
@@ -28,6 +35,19 @@ class AttributeParser {
         foreach (MethodInfo methodInfo in methodInfos) {
             OnConnect? onConnect = methodInfo.GetCustomAttribute<OnConnect>();
             if (onConnect != null) methodList.Add(methodInfo);
+        }
+
+        return methodList;
+    }
+
+    public static List<MethodInfo> SeekOnDisconnect(Object target) {
+        List<MethodInfo> methodList = new List<MethodInfo>();
+        Type type = target.GetType();
+        MethodInfo[] methodInfos = type.GetMethods();
+
+        foreach (MethodInfo methodInfo in methodInfos) {
+            OnDisconnect? onDisconnect = methodInfo.GetCustomAttribute<OnDisconnect>();
+            if (onDisconnect != null) methodList.Add(methodInfo);
         }
 
         return methodList;

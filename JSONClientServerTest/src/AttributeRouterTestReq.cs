@@ -3,8 +3,6 @@ using frar.JSONServer;
 using System.Net;
 using System.Threading;
 using System.Diagnostics;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
 
 namespace frar.JSONClientServerTest;
 
@@ -14,25 +12,21 @@ namespace frar.JSONClientServerTest;
 // If this object is modified, the modifications will survive to
 // future routes.
 [TestClass]
-public class TestReq : AttributeRouter {
+public class TestReq : ThreadedAttributeRouter {
     public string hashString = "";   
     public string isString = "";   
-
-    public TestReq() {
-        this.Initialize();
-    }
 
     [TestMethod]
     public void Rule_Order() {
         this.hashString = "";
         this.isString = "";
 
-        this.Process(@"{
-            'action' : 'setvalue',
-            'parameters' : {
+        this.Process(Packet.FromString(@"{
+            'Action' : 'setvalue',
+            'Parameters' : {
                 'value' : 'middle'
             }
-        }");
+        }"));
 
         // The appended field is preserved
         Assert.AreEqual("af59b2", this.hashString);
@@ -43,31 +37,31 @@ public class TestReq : AttributeRouter {
 
     // Add a field to the req object.
     [Route(Rule = ".*", Index = 0)]
-    public void Before(string value, [Req]JObject req){
+    public void Before(string value, [Req]Packet req){
         req["hash"] = "af59b2";
     }
 
     // The appended field is preserved
     [Route(Rule = ".*", Index = 1)]
-    public void After([Req]JObject req){
+    public void After([Req]Packet req){
         this.hashString += req["hash"];
     }
 
     // Change the action string
     [Route(Rule = ".*", Index = 2)]
-    public void ChangeAction([Req]JObject req){
+    public void ChangeAction([Req]Packet req){
         req["action"] = "newaction";
     }
 
     // The changed action doesn't affect routing.
     [Route(Index = 3)]
-    public void NewAction([Req]JObject req){
+    public void NewAction([Req]Packet req){
         this.isString += "new";
     }    
 
     // The changed action doesn't affect routing.
     [Route(Index = 4)]
-    public void SetValue([Req]JObject req){
+    public void SetValue([Req]Packet req){
         Debug.WriteLine(req);
         this.isString += "old";
     }

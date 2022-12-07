@@ -1,5 +1,8 @@
 namespace frar.JSONServer;
 
+/// <summary>
+/// Thrown by the Connection class.
+/// </summary>
 public class ConnectionException : Exception {
 
     public ConnectionException() {}

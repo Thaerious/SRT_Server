@@ -3,30 +3,24 @@ using frar.JSONServer;
 using System.Net;
 using System.Threading;
 using System.Diagnostics;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
 
 namespace frar.JSONClientServerTest;
 
 // The router control object can be used to terminate the current route chain.
 [TestClass]
-public class TestCtrl : AttributeRouter {
+public class TestCtrl : ThreadedAttributeRouter {
     public string hashString = "";   
-
-    public TestCtrl() {
-        this.Initialize();
-    }
 
     [TestMethod]
     public void Rule_Order() {
         this.hashString = "";
 
-        this.Process(@"{
-            'action' : 'setvalue',
-            'parameters' : {
+        this.Process(Packet.FromString(@"{
+            'Action' : 'setvalue',
+            'Parameters' : {
                 'value' : 'middle'
             }
-        }");
+        }"));
 
         Assert.AreEqual("before-middle", this.hashString);
     }

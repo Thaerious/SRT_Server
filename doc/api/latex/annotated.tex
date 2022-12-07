@@ -1,0 +1,19 @@
+\doxysection{Class List}
+Here are the classes, structs, unions and interfaces with brief descriptions\+:\begin{DoxyCompactList}
+\item\contentsline{section}{\mbox{\hyperlink{classAttributeParser}{Attribute\+Parser}} \\*Parses attributes from a class for use in routers }{\pageref{classAttributeParser}}{}
+\item\contentsline{section}{\mbox{\hyperlink{classConnection}{Connection}} \\*Manages reading from and writing to a socket }{\pageref{classConnection}}{}
+\item\contentsline{section}{\mbox{\hyperlink{classConnectionException}{Connection\+Exception}} \\*Thrown by the \mbox{\hyperlink{classConnection}{Connection}} class }{\pageref{classConnectionException}}{}
+\item\contentsline{section}{\mbox{\hyperlink{interfaceConnectionHnd}{Connection\+Hnd}} \\*Any class that the server invokes upon connection must implement this interface. The server will call the \mbox{\hyperlink{classOnConnect}{On\+Connect}} method whenever a new connection is made }{\pageref{interfaceConnectionHnd}}{}
+\item\contentsline{section}{\mbox{\hyperlink{classOnConnect}{On\+Connect}} \\*Annotated methods get invoked when a new connection occurs }{\pageref{classOnConnect}}{}
+\item\contentsline{section}{\mbox{\hyperlink{classOnDisconnect}{On\+Disconnect}} \\*Annotated methods get invoked when a disconnect occurs }{\pageref{classOnDisconnect}}{}
+\item\contentsline{section}{\mbox{\hyperlink{classPacket}{Packet}} \\*Communication packet for the \mbox{\hyperlink{classConnection}{Connection}} class.~\newline
+ Generates a JSON (JObject) packet }{\pageref{classPacket}}{}
+\item\contentsline{section}{\mbox{\hyperlink{classReq}{Req}} \\*Annotating a parameter in a \mbox{\hyperlink{classRoute}{Route}} marks it for the incoming request packet (encoded as a JObject ) }{\pageref{classReq}}{}
+\item\contentsline{section}{\mbox{\hyperlink{classRoute}{Route}} \\*Annotated methods will be considered when processing incoming packets }{\pageref{classRoute}}{}
+\item\contentsline{section}{\mbox{\hyperlink{classRouteEntry}{Route\+Entry}} \\*Data class for recording methods marked by the \mbox{\hyperlink{classRoute}{Route}} annotation. Used by \mbox{\hyperlink{classAttributeParser}{Attribute\+Parser}} }{\pageref{classRouteEntry}}{}
+\item\contentsline{section}{\mbox{\hyperlink{classServer}{Server$<$ HND $>$}} \\*Listens for incoming connections on it\textquotesingle{}s own thread.~\newline
+ When a connection occurs, a new \mbox{\hyperlink{interfaceConnectionHnd}{Connection\+Hnd}} object is created. A connection object is then passed to the \mbox{\hyperlink{interfaceConnectionHnd_a0268d87990ee53ff21fff7a6566f3d41}{Connection\+Hnd\+::\+On\+Connect}} method }{\pageref{classServer}}{}
+\item\contentsline{section}{\mbox{\hyperlink{classServerNotStartedException}{Server\+Not\+Started\+Exception}} \\*Thrown if Listen is called before Connect on \mbox{\hyperlink{classServer}{Server}} }{\pageref{classServerNotStartedException}}{}
+\item\contentsline{section}{\mbox{\hyperlink{classThreadedAttributeRouter}{Threaded\+Attribute\+Router}} \\*Listens for incoming packets on it\textquotesingle{}s own thread. Extend this class and add annotations to dictate behaviour. The accepted method annotations are\+: \mbox{\hyperlink{classOnConnect}{On\+Connect}}, \mbox{\hyperlink{classOnDisconnect}{On\+Disconnect}}, \mbox{\hyperlink{classRoute}{Route}} }{\pageref{classThreadedAttributeRouter}}{}
+\item\contentsline{section}{\mbox{\hyperlink{classThreadedConnHnd}{Threaded\+Conn\+Hnd}} \\*Implementation of \mbox{\hyperlink{interfaceConnectionHnd}{Connection\+Hnd}} that listens for incomming communication on a dedicated thread }{\pageref{classThreadedConnHnd}}{}
+\end{DoxyCompactList}

@@ -1,25 +1,45 @@
+using System.Net;
 using System.Net.Sockets;
 using System.Text;
-using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 namespace frar.JSONServer;
 
-// Read and write json objects from/to a socket.
-// The connection class is generated from the server Connections() iterator.
+/// <summary>
+/// Manages reading from and writing to a socket.
+/// </summary>
 public class Connection {
     public static readonly int BUFFER_SIZE = 4096;
     public static readonly int INT_BUFFER_SIZE = 4;
+    public static readonly String SYSTEM_FIELD = "system";
 
-    public readonly Socket socket;
+    public Socket socket {
+        get; protected set;
+    }
 
-    public bool Connected{
+    public bool Connected {
         get {
             if (this.socket == null) return false;
             return this.socket.Connected;
         }
     }
 
-    public Connection(Socket socket){
+    /// <summary>
+    /// Establish a connection to a remote host.
+    /// </summary>
+    /// <param name="ip"></param>
+    /// <param name="port"></param>
+    protected Connection(string ip = "127.0.0.1", int port = 7000) {
+        IPAddress ipAddress = IPAddress.Parse(ip);
+        var ipEndPoint = new IPEndPoint(ipAddress, port);
+        this.socket = new Socket(ipAddress.AddressFamily, SocketType.Stream, ProtocolType.Tcp);
+        this.socket.Connect(ipEndPoint);
+    }
+
+    /// <summary>
+    /// Default Constructor
+    /// </summary>
+    /// <param name="socket"></param>
+    public Connection(Socket socket) {
         this.socket = socket;
     }
 
@@ -28,7 +48,7 @@ public class Connection {
         int sz = socket.Receive(bytes, INT_BUFFER_SIZE, SocketFlags.None);
 
         if (sz == INT_BUFFER_SIZE) {
-             return BitConverter.ToInt32(bytes, 0);
+            return BitConverter.ToInt32(bytes, 0);
         }
         return 0;
     }
@@ -49,50 +69,60 @@ public class Connection {
         return Encoding.ASCII.GetString(bytes, 0, size);
     }
 
-    // Read the next string from the socket.
-    public String ReadString(){
-        int size = ReadSize();
-        return ReadString(size);        
-    }
-
-    // Read the next JSON object from the socket.
-    public JObject ReadJSON() {
-        try{
+    /// <summary>
+    /// Read the next packet from the socket.<br>
+    /// If a zero-length read occurs, then the socket is considered
+    /// broken and this connection is shut down.<br>
+    /// If this occurs the next json object returned will be:<br>
+    /// {'system' : 'disconnect'}
+    /// </summary>
+    /// <returns>A JObject encoded packet</returns>
+    /// <exception cref="ConnectionException"></exception>
+    public Packet Read() {
+        try {
             int size = ReadSize();
             String jsonString = ReadString(size);
-            if (jsonString != "") return JObject.Parse(jsonString);
+            if (jsonString != "") return Packet.FromString(jsonString);
+
+            this.socket.Shutdown(SocketShutdown.Both);
             this.socket.Close();
-            return JObject.Parse("{}");
-        } catch (Exception ex){
+            return null;
+        }
+        catch (Exception ex) {
             throw new ConnectionException("connection exception while reading", ex);
         }
     }
 
-    // Write a string on to the socket.
-    public void WriteString(string aString) {
-        byte[] msg = Encoding.ASCII.GetBytes(aString);
-        byte[] len = BitConverter.GetBytes(msg.Length);
-        this.socket.Send(len);
-        this.socket.Send(msg);
+    /// <summary>
+    /// Write a packet to the socket.
+    /// </summary>
+    /// <param name="packet">Non-null source packet.</param>
+    public void Write(Packet packet) {
+        this.Write(packet.ToString());
     }
 
-    // Write a JSON object on to the socket.
-    public void WriteJSON(JObject jObject){
-        String jString = jObject.ToString();
-        this.WriteString(jString);
+    /// <summary>
+    /// Write a string to the socket.
+    /// </summary>
+    /// <param name="packet">Non-null source string.</param>
+    private void Write(string aString) {
+        ArgumentNullException.ThrowIfNull(aString);
+        byte[] message = Encoding.ASCII.GetBytes(aString);
+        byte[] length = BitConverter.GetBytes(message.Length);
+        this.socket.Send(length);
+        this.socket.Send(message);
     }
 
-    // Write a JSON object on to the socket.
-    public void WriteJSON(Object anObject){
-        String jString = JsonConvert.SerializeObject(anObject);
-        this.WriteString(jString);
-    }
-
-    // Terminate this connection.
-    public virtual void Close() {
-        if (socket != null){
-            socket.Shutdown(SocketShutdown.Both);
-            socket.Close();
+    /// <summary>
+    /// Shutdown & close the underlying socket.
+    /// </summary>
+    public virtual void Shutdown() {
+        if (socket != null) {
+            try {
+                socket.Shutdown(SocketShutdown.Both);
+                socket.Close();
+            }
+            catch (ObjectDisposedException) { }
         }
     }
 }

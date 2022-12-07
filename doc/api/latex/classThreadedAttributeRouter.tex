@@ -1,0 +1,165 @@
+\hypertarget{classThreadedAttributeRouter}{}\doxysection{Threaded\+Attribute\+Router Class Reference}
+\label{classThreadedAttributeRouter}\index{ThreadedAttributeRouter@{ThreadedAttributeRouter}}
+
+
+Listens for incoming packets on it\textquotesingle{}s own thread. Extend this class and add annotations to dictate behaviour. The accepted method annotations are\+: \mbox{\hyperlink{classOnConnect}{On\+Connect}}, \mbox{\hyperlink{classOnDisconnect}{On\+Disconnect}}, \mbox{\hyperlink{classRoute}{Route}}.  
+
+
+
+
+Inheritance diagram for Threaded\+Attribute\+Router\+:
+% FIG 0
+
+
+Collaboration diagram for Threaded\+Attribute\+Router\+:
+% FIG 1
+\doxysubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{classThreadedAttributeRouter_af81fbd7fcbfa88544eea25df57970684}{Threaded\+Attribute\+Router}} ()
+\begin{DoxyCompactList}\small\item\em Default no-\/arg constructor. \end{DoxyCompactList}\item 
+override void \mbox{\hyperlink{classThreadedAttributeRouter_a4de886107779d0cb1f29bbe80b39e249}{On\+Connect}} (\mbox{\hyperlink{classConnection}{Connection}} connection)
+\begin{DoxyCompactList}\small\item\em Called when a connection occurs, will invoke all mtehods with the \mbox{[}On\+Connection\mbox{]} annotation. \end{DoxyCompactList}\item 
+override void \mbox{\hyperlink{classThreadedAttributeRouter_a9107f60e16effb6d6826b9f691809bf6}{On\+Disconnect}} (DISCONNECT\+\_\+\+REASON reason)
+\begin{DoxyCompactList}\small\item\em Called when a disconnect occurs. A \textquotesingle{}gracefull\textquotesingle{} disconnect occurs when the server originates the disconnect. A \textquotesingle{}broken\textquotesingle{} disconnect occurs when the socket terminates unexpectedly. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classThreadedAttributeRouter_aedc14652830c610e1dcba15887dc8b19}{Process}} (string is\+String)
+\begin{DoxyCompactList}\small\item\em Process a packet as a json-\/encoded string. Triggers all methods annotated with \mbox{[}\mbox{\hyperlink{classRoute}{Route}}\mbox{]} whose \textquotesingle{}Rule\textquotesingle{} regex matches the action field of the packet. \end{DoxyCompactList}\item 
+override void \mbox{\hyperlink{classThreadedAttributeRouter_a82f2185d34a5a008f791fc0299ed036b}{Process}} (JObject json\+Req)
+\begin{DoxyCompactList}\small\item\em Process a packet as a json object. Triggers all methods annotated \mbox{[}\mbox{\hyperlink{classRoute}{Route}}\mbox{]} whose \textquotesingle{}Rule\textquotesingle{} regex matches the action field of the packet. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Static Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{classThreadedAttributeRouter_af38e704a0b11bbe411075c428c9fba71}\label{classThreadedAttributeRouter_af38e704a0b11bbe411075c428c9fba71}} 
+static readonly String {\bfseries ACTION\+\_\+\+FIELD} = \char`\"{}action\char`\"{}
+\item 
+\mbox{\Hypertarget{classThreadedAttributeRouter_aa913c97f73f87541e60bbe44777598c7}\label{classThreadedAttributeRouter_aa913c97f73f87541e60bbe44777598c7}} 
+static readonly String {\bfseries PARAMETER\+\_\+\+FIELD} = \char`\"{}parameters\char`\"{}
+\end{DoxyCompactItemize}
+\doxysubsection*{Properties}
+\begin{DoxyCompactItemize}
+\item 
+bool \mbox{\hyperlink{classThreadedAttributeRouter_a30e066b8a55a47a354c2a1c47b9e44a1}{Terminate\+Route}} = false\hspace{0.3cm}{\ttfamily  \mbox{[}get, set\mbox{]}}
+\begin{DoxyCompactList}\small\item\em When set to true, no further routes will be processed. This field is reset to false whenever a new packet is received. \end{DoxyCompactList}\item 
+List$<$ \mbox{\hyperlink{classRouteEntry}{Route\+Entry}} $>$ \mbox{\hyperlink{classThreadedAttributeRouter_ad76e0250f540ecbf559e563469eda3da}{Routes}}\hspace{0.3cm}{\ttfamily  \mbox{[}get\mbox{]}}
+\begin{DoxyCompactList}\small\item\em Retrieve a non-\/reflective list of route entries. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Listens for incoming packets on it\textquotesingle{}s own thread. Extend this class and add annotations to dictate behaviour. The accepted method annotations are\+: \mbox{\hyperlink{classOnConnect}{On\+Connect}}, \mbox{\hyperlink{classOnDisconnect}{On\+Disconnect}}, \mbox{\hyperlink{classRoute}{Route}}. 
+
+
+
+\doxysubsection{Constructor \& Destructor Documentation}
+\mbox{\Hypertarget{classThreadedAttributeRouter_af81fbd7fcbfa88544eea25df57970684}\label{classThreadedAttributeRouter_af81fbd7fcbfa88544eea25df57970684}} 
+\index{ThreadedAttributeRouter@{ThreadedAttributeRouter}!ThreadedAttributeRouter@{ThreadedAttributeRouter}}
+\index{ThreadedAttributeRouter@{ThreadedAttributeRouter}!ThreadedAttributeRouter@{ThreadedAttributeRouter}}
+\doxysubsubsection{\texorpdfstring{ThreadedAttributeRouter()}{ThreadedAttributeRouter()}}
+{\footnotesize\ttfamily Threaded\+Attribute\+Router.\+Threaded\+Attribute\+Router (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Default no-\/arg constructor. 
+
+
+
+\doxysubsection{Member Function Documentation}
+\mbox{\Hypertarget{classThreadedAttributeRouter_a4de886107779d0cb1f29bbe80b39e249}\label{classThreadedAttributeRouter_a4de886107779d0cb1f29bbe80b39e249}} 
+\index{ThreadedAttributeRouter@{ThreadedAttributeRouter}!OnConnect@{OnConnect}}
+\index{OnConnect@{OnConnect}!ThreadedAttributeRouter@{ThreadedAttributeRouter}}
+\doxysubsubsection{\texorpdfstring{OnConnect()}{OnConnect()}}
+{\footnotesize\ttfamily override void Threaded\+Attribute\+Router.\+On\+Connect (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classConnection}{Connection}}}]{connection }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [virtual]}}
+
+
+
+Called when a connection occurs, will invoke all mtehods with the \mbox{[}On\+Connection\mbox{]} annotation. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em connection} & The new conneciton object\\
+\hline
+\end{DoxyParams}
+
+
+Reimplemented from \mbox{\hyperlink{classThreadedConnHnd_aa338742123225dd67b9f914d81e73865}{Threaded\+Conn\+Hnd}}.
+
+\mbox{\Hypertarget{classThreadedAttributeRouter_a9107f60e16effb6d6826b9f691809bf6}\label{classThreadedAttributeRouter_a9107f60e16effb6d6826b9f691809bf6}} 
+\index{ThreadedAttributeRouter@{ThreadedAttributeRouter}!OnDisconnect@{OnDisconnect}}
+\index{OnDisconnect@{OnDisconnect}!ThreadedAttributeRouter@{ThreadedAttributeRouter}}
+\doxysubsubsection{\texorpdfstring{OnDisconnect()}{OnDisconnect()}}
+{\footnotesize\ttfamily override void Threaded\+Attribute\+Router.\+On\+Disconnect (\begin{DoxyParamCaption}\item[{DISCONNECT\+\_\+\+REASON}]{reason }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [virtual]}}
+
+
+
+Called when a disconnect occurs. A \textquotesingle{}gracefull\textquotesingle{} disconnect occurs when the server originates the disconnect. A \textquotesingle{}broken\textquotesingle{} disconnect occurs when the socket terminates unexpectedly. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em reason} & A description of what triggered the disconnect.\\
+\hline
+\end{DoxyParams}
+
+
+Reimplemented from \mbox{\hyperlink{classThreadedConnHnd_a2bdab98040dd184e8a6819bf28201ae1}{Threaded\+Conn\+Hnd}}.
+
+\mbox{\Hypertarget{classThreadedAttributeRouter_a82f2185d34a5a008f791fc0299ed036b}\label{classThreadedAttributeRouter_a82f2185d34a5a008f791fc0299ed036b}} 
+\index{ThreadedAttributeRouter@{ThreadedAttributeRouter}!Process@{Process}}
+\index{Process@{Process}!ThreadedAttributeRouter@{ThreadedAttributeRouter}}
+\doxysubsubsection{\texorpdfstring{Process()}{Process()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily override void Threaded\+Attribute\+Router.\+Process (\begin{DoxyParamCaption}\item[{JObject}]{json\+Req }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [virtual]}}
+
+
+
+Process a packet as a json object. Triggers all methods annotated \mbox{[}\mbox{\hyperlink{classRoute}{Route}}\mbox{]} whose \textquotesingle{}Rule\textquotesingle{} regex matches the action field of the packet. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em is\+String} & JSON object representing a packet\\
+\hline
+\end{DoxyParams}
+
+
+Implements \mbox{\hyperlink{classThreadedConnHnd_ade715126e2324982ff6c22df2f12942e}{Threaded\+Conn\+Hnd}}.
+
+\mbox{\Hypertarget{classThreadedAttributeRouter_aedc14652830c610e1dcba15887dc8b19}\label{classThreadedAttributeRouter_aedc14652830c610e1dcba15887dc8b19}} 
+\index{ThreadedAttributeRouter@{ThreadedAttributeRouter}!Process@{Process}}
+\index{Process@{Process}!ThreadedAttributeRouter@{ThreadedAttributeRouter}}
+\doxysubsubsection{\texorpdfstring{Process()}{Process()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily void Threaded\+Attribute\+Router.\+Process (\begin{DoxyParamCaption}\item[{string}]{is\+String }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Process a packet as a json-\/encoded string. Triggers all methods annotated with \mbox{[}\mbox{\hyperlink{classRoute}{Route}}\mbox{]} whose \textquotesingle{}Rule\textquotesingle{} regex matches the action field of the packet. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em is\+String} & JSON encoded string representing a packet\\
+\hline
+\end{DoxyParams}
+
+
+\doxysubsection{Property Documentation}
+\mbox{\Hypertarget{classThreadedAttributeRouter_ad76e0250f540ecbf559e563469eda3da}\label{classThreadedAttributeRouter_ad76e0250f540ecbf559e563469eda3da}} 
+\index{ThreadedAttributeRouter@{ThreadedAttributeRouter}!Routes@{Routes}}
+\index{Routes@{Routes}!ThreadedAttributeRouter@{ThreadedAttributeRouter}}
+\doxysubsubsection{\texorpdfstring{Routes}{Routes}}
+{\footnotesize\ttfamily List$<$\mbox{\hyperlink{classRouteEntry}{Route\+Entry}}$>$ Threaded\+Attribute\+Router.\+Routes\hspace{0.3cm}{\ttfamily [get]}}
+
+
+
+Retrieve a non-\/reflective list of route entries. 
+
+\mbox{\Hypertarget{classThreadedAttributeRouter_a30e066b8a55a47a354c2a1c47b9e44a1}\label{classThreadedAttributeRouter_a30e066b8a55a47a354c2a1c47b9e44a1}} 
+\index{ThreadedAttributeRouter@{ThreadedAttributeRouter}!TerminateRoute@{TerminateRoute}}
+\index{TerminateRoute@{TerminateRoute}!ThreadedAttributeRouter@{ThreadedAttributeRouter}}
+\doxysubsubsection{\texorpdfstring{TerminateRoute}{TerminateRoute}}
+{\footnotesize\ttfamily bool Threaded\+Attribute\+Router.\+Terminate\+Route = false\hspace{0.3cm}{\ttfamily [get]}, {\ttfamily [set]}}
+
+
+
+When set to true, no further routes will be processed. This field is reset to false whenever a new packet is received. 
+
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+src/\+Attribute\+Router/Threaded\+Attribute\+Router.\+cs\end{DoxyCompactItemize}

@@ -1,0 +1,118 @@
+\hypertarget{classThreadedConnHnd}{}\doxysection{Threaded\+Conn\+Hnd Class Reference}
+\label{classThreadedConnHnd}\index{ThreadedConnHnd@{ThreadedConnHnd}}
+
+
+Implementation of \mbox{\hyperlink{interfaceConnectionHnd}{Connection\+Hnd}} that listens for incomming communication on a dedicated thread.  
+
+
+
+
+Inheritance diagram for Threaded\+Conn\+Hnd\+:
+% FIG 0
+
+
+Collaboration diagram for Threaded\+Conn\+Hnd\+:
+% FIG 1
+\doxysubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+virtual void \mbox{\hyperlink{classThreadedConnHnd_aa338742123225dd67b9f914d81e73865}{On\+Connect}} (\mbox{\hyperlink{classConnection}{Connection}} connection)
+\begin{DoxyCompactList}\small\item\em Method called by \mbox{\hyperlink{classServer}{Server}} when a new connection occurs. \end{DoxyCompactList}\item 
+abstract void \mbox{\hyperlink{classThreadedConnHnd_ade715126e2324982ff6c22df2f12942e}{Process}} (JObject j\+Object)
+\begin{DoxyCompactList}\small\item\em Override this method to handle incoming communication packets. Each packet is encoded as a json object. \end{DoxyCompactList}\item 
+virtual void \mbox{\hyperlink{classThreadedConnHnd_a2bdab98040dd184e8a6819bf28201ae1}{On\+Disconnect}} (DISCONNECT\+\_\+\+REASON reason)
+\begin{DoxyCompactList}\small\item\em Override this method to handle disconnect behaviour. ~\newline
+ \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classThreadedConnHnd_a10370170b4e1a1b69dbf69c9d90e731c}{Shut\+Down}} ()
+\begin{DoxyCompactList}\small\item\em Stops listening for new packets and shuts down the underlying connection. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Properties}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{classThreadedConnHnd_a230a587ce3a714a69320c817eb675f39}\label{classThreadedConnHnd_a230a587ce3a714a69320c817eb675f39}} 
+\mbox{\hyperlink{classConnection}{Connection}} {\bfseries Connection}\hspace{0.3cm}{\ttfamily  \mbox{[}get\mbox{]}}
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Implementation of \mbox{\hyperlink{interfaceConnectionHnd}{Connection\+Hnd}} that listens for incomming communication on a dedicated thread. 
+
+
+
+\doxysubsection{Member Function Documentation}
+\mbox{\Hypertarget{classThreadedConnHnd_aa338742123225dd67b9f914d81e73865}\label{classThreadedConnHnd_aa338742123225dd67b9f914d81e73865}} 
+\index{ThreadedConnHnd@{ThreadedConnHnd}!OnConnect@{OnConnect}}
+\index{OnConnect@{OnConnect}!ThreadedConnHnd@{ThreadedConnHnd}}
+\doxysubsubsection{\texorpdfstring{OnConnect()}{OnConnect()}}
+{\footnotesize\ttfamily virtual void Threaded\+Conn\+Hnd.\+On\+Connect (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classConnection}{Connection}}}]{connection }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [virtual]}}
+
+
+
+Method called by \mbox{\hyperlink{classServer}{Server}} when a new connection occurs. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em connection} & \\
+\hline
+\end{DoxyParams}
+
+
+Implements \mbox{\hyperlink{interfaceConnectionHnd_a0268d87990ee53ff21fff7a6566f3d41}{Connection\+Hnd}}.
+
+
+
+Reimplemented in \mbox{\hyperlink{classThreadedAttributeRouter_a4de886107779d0cb1f29bbe80b39e249}{Threaded\+Attribute\+Router}}.
+
+\mbox{\Hypertarget{classThreadedConnHnd_a2bdab98040dd184e8a6819bf28201ae1}\label{classThreadedConnHnd_a2bdab98040dd184e8a6819bf28201ae1}} 
+\index{ThreadedConnHnd@{ThreadedConnHnd}!OnDisconnect@{OnDisconnect}}
+\index{OnDisconnect@{OnDisconnect}!ThreadedConnHnd@{ThreadedConnHnd}}
+\doxysubsubsection{\texorpdfstring{OnDisconnect()}{OnDisconnect()}}
+{\footnotesize\ttfamily virtual void Threaded\+Conn\+Hnd.\+On\+Disconnect (\begin{DoxyParamCaption}\item[{DISCONNECT\+\_\+\+REASON}]{reason }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [virtual]}}
+
+
+
+Override this method to handle disconnect behaviour. ~\newline
+ 
+
+
+\begin{DoxyParams}{Parameters}
+{\em reason} & Will be \textquotesingle{}gracefull\textquotesingle{} when the server initiated the disconnect. Otherwise will be \textquotesingle{}broken\textquotesingle{} indicating an abropt disconnect. \\
+\hline
+\end{DoxyParams}
+
+
+Reimplemented in \mbox{\hyperlink{classThreadedAttributeRouter_a9107f60e16effb6d6826b9f691809bf6}{Threaded\+Attribute\+Router}}.
+
+\mbox{\Hypertarget{classThreadedConnHnd_ade715126e2324982ff6c22df2f12942e}\label{classThreadedConnHnd_ade715126e2324982ff6c22df2f12942e}} 
+\index{ThreadedConnHnd@{ThreadedConnHnd}!Process@{Process}}
+\index{Process@{Process}!ThreadedConnHnd@{ThreadedConnHnd}}
+\doxysubsubsection{\texorpdfstring{Process()}{Process()}}
+{\footnotesize\ttfamily abstract void Threaded\+Conn\+Hnd.\+Process (\begin{DoxyParamCaption}\item[{JObject}]{j\+Object }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [pure virtual]}}
+
+
+
+Override this method to handle incoming communication packets. Each packet is encoded as a json object. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em j\+Object} & \\
+\hline
+\end{DoxyParams}
+
+
+Implemented in \mbox{\hyperlink{classThreadedAttributeRouter_a82f2185d34a5a008f791fc0299ed036b}{Threaded\+Attribute\+Router}}.
+
+\mbox{\Hypertarget{classThreadedConnHnd_a10370170b4e1a1b69dbf69c9d90e731c}\label{classThreadedConnHnd_a10370170b4e1a1b69dbf69c9d90e731c}} 
+\index{ThreadedConnHnd@{ThreadedConnHnd}!ShutDown@{ShutDown}}
+\index{ShutDown@{ShutDown}!ThreadedConnHnd@{ThreadedConnHnd}}
+\doxysubsubsection{\texorpdfstring{ShutDown()}{ShutDown()}}
+{\footnotesize\ttfamily void Threaded\+Conn\+Hnd.\+Shut\+Down (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Stops listening for new packets and shuts down the underlying connection. 
+
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+src/Threaded\+Conn\+Hnd.\+cs\end{DoxyCompactItemize}

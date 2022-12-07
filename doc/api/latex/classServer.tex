@@ -1,0 +1,58 @@
+\hypertarget{classServer}{}\doxysection{Server$<$ HND $>$ Class Template Reference}
+\label{classServer}\index{Server$<$ HND $>$@{Server$<$ HND $>$}}
+
+
+Listens for incoming connections on it\textquotesingle{}s own thread.~\newline
+ When a connection occurs, a new \mbox{\hyperlink{interfaceConnectionHnd}{Connection\+Hnd}} object is created. A connection object is then passed to the \mbox{\hyperlink{interfaceConnectionHnd_a0268d87990ee53ff21fff7a6566f3d41}{Connection\+Hnd\+::\+On\+Connect}} method.  
+
+
+\doxysubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{classServer_a118459cba9b29236c14022810fc0d7fe}\label{classServer_a118459cba9b29236c14022810fc0d7fe}} 
+\mbox{\hyperlink{classServer}{Server}}$<$ HND $>$ {\bfseries Connect} (string ip, int port)
+\item 
+\mbox{\Hypertarget{classServer_ae032c2dc0402af56d66d2c96fc50f6fc}\label{classServer_ae032c2dc0402af56d66d2c96fc50f6fc}} 
+\mbox{\hyperlink{classServer}{Server}}$<$ HND $>$ {\bfseries Connect} (int port)
+\item 
+\mbox{\Hypertarget{classServer_a40e66f725ccfcf271b84b97acb98cd1c}\label{classServer_a40e66f725ccfcf271b84b97acb98cd1c}} 
+Thread {\bfseries Listen} ()
+\item 
+\mbox{\Hypertarget{classServer_a8f028aa719c5da1d3fe9e82799e7e061}\label{classServer_a8f028aa719c5da1d3fe9e82799e7e061}} 
+IEnumerable$<$ HND $>$ {\bfseries Connections} ()
+\item 
+\mbox{\Hypertarget{classServer_aaf28515560076d7f142757c53e0db18c}\label{classServer_aaf28515560076d7f142757c53e0db18c}} 
+HND {\bfseries Accept\+Next} ()
+\item 
+\mbox{\Hypertarget{classServer_a9f52c15b3a23fcf3157d970a5f4a65ae}\label{classServer_a9f52c15b3a23fcf3157d970a5f4a65ae}} 
+void {\bfseries Shutdown} ()
+\end{DoxyCompactItemize}
+\doxysubsection*{Properties}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{classServer_ad697c4c0465020fa706644511f8655b9}\label{classServer_ad697c4c0465020fa706644511f8655b9}} 
+Socket {\bfseries socket} = null!\hspace{0.3cm}{\ttfamily  \mbox{[}get\mbox{]}}
+\item 
+\mbox{\Hypertarget{classServer_a7809a7f5fd1caa25a45800918915b535}\label{classServer_a7809a7f5fd1caa25a45800918915b535}} 
+bool {\bfseries is\+Running} = true\hspace{0.3cm}{\ttfamily  \mbox{[}get\mbox{]}}
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Listens for incoming connections on it\textquotesingle{}s own thread.~\newline
+ When a connection occurs, a new \mbox{\hyperlink{interfaceConnectionHnd}{Connection\+Hnd}} object is created. A connection object is then passed to the \mbox{\hyperlink{interfaceConnectionHnd_a0268d87990ee53ff21fff7a6566f3d41}{Connection\+Hnd\+::\+On\+Connect}} method. 
+
+
+\begin{DoxyTemplParams}{Template Parameters}
+{\em HND} & The object type emitted when a connection occurs.\\
+\hline
+\end{DoxyTemplParams}
+\begin{Desc}
+\item[Type Constraints]\begin{description}
+\item[{\em HND} : {\em \mbox{\hyperlink{interfaceConnectionHnd}{Connection\+Hnd}}}]\item[{\em HND} : {\em new()}]\end{description}
+\end{Desc}
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+src/Server.\+cs\end{DoxyCompactItemize}

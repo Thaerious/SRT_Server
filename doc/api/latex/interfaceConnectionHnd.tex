@@ -1,0 +1,48 @@
+\hypertarget{interfaceConnectionHnd}{}\doxysection{Connection\+Hnd Interface Reference}
+\label{interfaceConnectionHnd}\index{ConnectionHnd@{ConnectionHnd}}
+
+
+Any class that the server invokes upon connection must implement this interface. The server will call the \mbox{\hyperlink{classOnConnect}{On\+Connect}} method whenever a new connection is made.  
+
+
+
+
+Inheritance diagram for Connection\+Hnd\+:
+% FIG 0
+\doxysubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+void \mbox{\hyperlink{interfaceConnectionHnd_a0268d87990ee53ff21fff7a6566f3d41}{On\+Connect}} (\mbox{\hyperlink{classConnection}{Connection}} connection)
+\begin{DoxyCompactList}\small\item\em Method called by \mbox{\hyperlink{classServer}{Server}} when a new connection occurs. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Any class that the server invokes upon connection must implement this interface. The server will call the \mbox{\hyperlink{classOnConnect}{On\+Connect}} method whenever a new connection is made. 
+
+
+
+\doxysubsection{Member Function Documentation}
+\mbox{\Hypertarget{interfaceConnectionHnd_a0268d87990ee53ff21fff7a6566f3d41}\label{interfaceConnectionHnd_a0268d87990ee53ff21fff7a6566f3d41}} 
+\index{ConnectionHnd@{ConnectionHnd}!OnConnect@{OnConnect}}
+\index{OnConnect@{OnConnect}!ConnectionHnd@{ConnectionHnd}}
+\doxysubsubsection{\texorpdfstring{OnConnect()}{OnConnect()}}
+{\footnotesize\ttfamily void Connection\+Hnd.\+On\+Connect (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classConnection}{Connection}}}]{connection }\end{DoxyParamCaption})}
+
+
+
+Method called by \mbox{\hyperlink{classServer}{Server}} when a new connection occurs. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em connection} & \\
+\hline
+\end{DoxyParams}
+
+
+Implemented in \mbox{\hyperlink{classThreadedConnHnd_aa338742123225dd67b9f914d81e73865}{Threaded\+Conn\+Hnd}}, and \mbox{\hyperlink{classThreadedAttributeRouter_a4de886107779d0cb1f29bbe80b39e249}{Threaded\+Attribute\+Router}}.
+
+
+
+The documentation for this interface was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+src/Connection\+Hnd.\+cs\end{DoxyCompactItemize}

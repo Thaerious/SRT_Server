@@ -1,7 +1,15 @@
 using Newtonsoft.Json.Linq;
 namespace frar.JSONServer;
 
-// Creates and starts a new thread when a new connection takes places.
+public enum DISCONNECT_REASON {
+    broken,
+    gracefull
+};
+
+/// <summary>
+/// Implementation of ConnectionHnd that listens for incomming communication on a
+/// dedicated thread.
+/// </summary>
 public abstract class ThreadedConnHnd : ConnectionHnd {
     private Thread thread = null!;
     private bool isRunning = true;
@@ -23,34 +31,45 @@ public abstract class ThreadedConnHnd : ConnectionHnd {
             new ThreadStart(() => {
                 while (isRunning) {
                     try {
-                        JObject jObject = connection.ReadJSON();
-                        Console.WriteLine("server : " + jObject.ToString());
-                        this.Process(jObject);
+                        Packet packet = connection.Read();                        
+                        this.Process(packet);
                     } catch (ConnectionException) {
-                        this.isRunning = false;
-                        this.OnDisconnect();
+                        if (this.isRunning){
+                            this.isRunning = false;
+                            Console.WriteLine("broken");
+                            this.OnDisconnect(DISCONNECT_REASON.broken);
+                        } 
                     }
                 }
-
-                connection.Close();
             })
         );
         thread.Start();
     }
 
-    abstract public void Process(JObject jObject);
+    /// <summary>
+    /// Override this method to handle incoming communication packets.  Each packet
+    /// is encoded as a json object.
+    /// </summary>
+    /// <param name="jObject"></param>
+    abstract public void Process(Packet packet);
 
-    virtual public void OnDisconnect(){
-        this.isRunning = false;
-    }
+    /// <summary>
+    /// Override this method to handle disconnect behaviour.    
+    /// </summary>
+    /// <param name="reason">
+    /// Will be 'gracefull' when the server initiated the disconnect. 
+    /// Otherwise will be 'broken' indicating an abropt disconnect.
+    /// </param>
+    virtual public void OnDisconnect(DISCONNECT_REASON reason){}
 
-    public void Close() {
+    /// <summary>
+    /// Stops listening for new packets and shuts down the underlying connection.
+    /// </summary>
+    public void ShutDown() {
         try {
             this.isRunning = false;
-            this.Connection.Close();
-        } catch (ObjectDisposedException ex) {
-            Console.WriteLine(ex);
-            // do nothing
-        }
+            this.Connection.Shutdown();
+            this.OnDisconnect(DISCONNECT_REASON.gracefull);
+        } catch (ObjectDisposedException) {}
     }
 }

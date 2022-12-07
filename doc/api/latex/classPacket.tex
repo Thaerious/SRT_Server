@@ -1,0 +1,79 @@
+\hypertarget{classPacket}{}\doxysection{Packet Class Reference}
+\label{classPacket}\index{Packet@{Packet}}
+
+
+Communication packet for the \mbox{\hyperlink{classConnection}{Connection}} class.~\newline
+ Generates a JSON (JObject) packet.  
+
+
+\doxysubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{classPacket_a3b22e5d0c3b9411399dddf3dabb228ec}{Packet}} (string action)
+\begin{DoxyCompactList}\small\item\em Create a new packet with the specified action and parameters. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classPacket}{Packet}} \mbox{\hyperlink{classPacket_a31209a750195d8de266df4c44b466ee3}{Set}} (string name, IConvertible value)
+\begin{DoxyCompactList}\small\item\em Add a parameter to this packet. Parameters must be of a primitive type or string. Setting a parameter multiple times will overwrite it. \end{DoxyCompactList}\item 
+JObject \mbox{\hyperlink{classPacket_a322688ed1c7cad768b25a7e69735e71d}{To\+JSON}} ()
+\begin{DoxyCompactList}\small\item\em Generate a JObject from this packet. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Communication packet for the \mbox{\hyperlink{classConnection}{Connection}} class.~\newline
+ Generates a JSON (JObject) packet. 
+
+
+
+\doxysubsection{Constructor \& Destructor Documentation}
+\mbox{\Hypertarget{classPacket_a3b22e5d0c3b9411399dddf3dabb228ec}\label{classPacket_a3b22e5d0c3b9411399dddf3dabb228ec}} 
+\index{Packet@{Packet}!Packet@{Packet}}
+\index{Packet@{Packet}!Packet@{Packet}}
+\doxysubsubsection{\texorpdfstring{Packet()}{Packet()}}
+{\footnotesize\ttfamily Packet.\+Packet (\begin{DoxyParamCaption}\item[{string}]{action }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Create a new packet with the specified action and parameters. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em action} & String that triggers routes\\
+\hline
+\end{DoxyParams}
+
+
+\doxysubsection{Member Function Documentation}
+\mbox{\Hypertarget{classPacket_a31209a750195d8de266df4c44b466ee3}\label{classPacket_a31209a750195d8de266df4c44b466ee3}} 
+\index{Packet@{Packet}!Set@{Set}}
+\index{Set@{Set}!Packet@{Packet}}
+\doxysubsubsection{\texorpdfstring{Set()}{Set()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{classPacket}{Packet}} Packet.\+Set (\begin{DoxyParamCaption}\item[{string}]{name,  }\item[{IConvertible}]{value }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Add a parameter to this packet. Parameters must be of a primitive type or string. Setting a parameter multiple times will overwrite it. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em name} & Name of the parameter\\
+\hline
+{\em value} & Parameter value (primitive)\\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{classPacket_a322688ed1c7cad768b25a7e69735e71d}\label{classPacket_a322688ed1c7cad768b25a7e69735e71d}} 
+\index{Packet@{Packet}!ToJSON@{ToJSON}}
+\index{ToJSON@{ToJSON}!Packet@{Packet}}
+\doxysubsubsection{\texorpdfstring{ToJSON()}{ToJSON()}}
+{\footnotesize\ttfamily JObject Packet.\+To\+JSON (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Generate a JObject from this packet. 
+
+\begin{DoxyReturn}{Returns}
+
+\end{DoxyReturn}
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+src/Connection.\+cs\end{DoxyCompactItemize}

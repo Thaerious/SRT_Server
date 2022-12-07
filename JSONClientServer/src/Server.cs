@@ -3,9 +3,14 @@ using System.Net.Sockets;
 
 namespace frar.JSONServer;
 
+/// <summary>
+/// Listens for incoming connections on it's own thread.<br>
+/// When a connection occurs, a new ConnectionHnd object is created.  A connection
+/// object is then passed to the ConnectionHnd::OnConnect method.
+/// 
+/// </summary>
+/// <typeparam name="HND">The object type emitted when a connection occurs.</typeparam>
 public class Server<HND> where HND : ConnectionHnd, new() {
-    public delegate void OnAccept(Connection connection);
-
     public Socket socket {
         get; private set;
     } = null!;
@@ -75,7 +80,7 @@ public class Server<HND> where HND : ConnectionHnd, new() {
     }
 
     // Stop accepting new connections and shut down the server.
-    public void Close() {
+    public void Shutdown() {
         this.isRunning = false;
         try {
             this.socket.Shutdown(SocketShutdown.Both);
@@ -86,8 +91,11 @@ public class Server<HND> where HND : ConnectionHnd, new() {
     }
 }
 
-public class ServerNotStartedException : Exception {
 
+/// <summary>
+/// Thrown if Listen is called before Connect on Server.
+/// </summary>
+public class ServerNotStartedException : Exception {
     private static string MSG = "Server not connected.  Call #Connect before #Listen";
 
     public ServerNotStartedException() : base(MSG) { }

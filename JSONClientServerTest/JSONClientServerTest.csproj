@@ -5,7 +5,7 @@
     <Nullable>enable</Nullable>
     <IsPackable>false</IsPackable>
     <GenerateProgramFile>false</GenerateProgramFile>
-    <StartupObject>frar.JSONClientServerTest.DemoAttr</StartupObject>
+    <StartupObject>frar.JSONClientServerTest.Demo</StartupObject>
   </PropertyGroup>
 
   <ItemGroup>

@@ -2,12 +2,28 @@ using System.Reflection;
 
 namespace frar.JSONServer;
 
+/// <summary>
+/// Annotated methods get invoked when a disconnect occurs.
+/// </summary>
+[AttributeUsage(AttributeTargets.Method)]
+public class OnDisconnect : Attribute {}
+
+/// <summary>
+/// Annotated methods get invoked when a new connection occurs.
+/// </summary>
 [AttributeUsage(AttributeTargets.Method)]
 public class OnConnect : Attribute {}
 
+/// <summary>
+/// Annotating a parameter in a Route marks it for the incoming
+/// request packet.
+/// </summary>
 [AttributeUsage(AttributeTargets.Parameter)]
 public class Req : Attribute {}
 
+/// <summary>
+/// Annotated methods will be considered when processing incoming packets.
+/// </summary>
 [AttributeUsage(AttributeTargets.Method)]
 public class Route : Attribute {
     private string rule;

@@ -1,0 +1,175 @@
+\hypertarget{classConnection}{}\doxysection{Connection Class Reference}
+\label{classConnection}\index{Connection@{Connection}}
+
+
+Manages reading from and writing to a socket.  
+
+
+\doxysubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{classConnection_a1cecbca59584c49bc6afe1605829ce14}{Connection}} (Socket socket)
+\begin{DoxyCompactList}\small\item\em Default Constructor \end{DoxyCompactList}\item 
+JObject \mbox{\hyperlink{classConnection_a4c90295a3ad6abc881fe3b5b9d755332}{Read\+JSON}} ()
+\begin{DoxyCompactList}\small\item\em Read the next packet from the socket.~\newline
+ If a zero-\/length read occurs, then the socket is considered broken and this connection is shut down.~\newline
+ If this occurs the next json object returned will be\+:~\newline
+ \{\textquotesingle{}system\textquotesingle{} \+: \textquotesingle{}disconnect\textquotesingle{}\} \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classConnection_a9590d0a2791f5e725cb4e5e981aec024}{Write}} (\mbox{\hyperlink{classPacket}{Packet}} packet)
+\begin{DoxyCompactList}\small\item\em Write a packet to the socket. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classConnection_a9be33675e430b43695dfe50a66fb4667}{Write}} (string a\+String)
+\begin{DoxyCompactList}\small\item\em Write a string to the socket. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classConnection_ace72fcea186e2e9120a6a2eadf6362ec}{Write}} (JObject j\+Object)
+\begin{DoxyCompactList}\small\item\em Write a json object to the socket. \end{DoxyCompactList}\item 
+virtual void \mbox{\hyperlink{classConnection_a6843e65d8d19dc6d024ecb534b908c36}{Shutdown}} ()
+\begin{DoxyCompactList}\small\item\em Shutdown \& close the underlying socket. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Static Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{classConnection_a37fd87567b367027f73694528fccb1f4}\label{classConnection_a37fd87567b367027f73694528fccb1f4}} 
+static readonly int {\bfseries BUFFER\+\_\+\+SIZE} = 4096
+\item 
+\mbox{\Hypertarget{classConnection_ab7ce3588bb7cee74c84a98c8423a5a95}\label{classConnection_ab7ce3588bb7cee74c84a98c8423a5a95}} 
+static readonly int {\bfseries INT\+\_\+\+BUFFER\+\_\+\+SIZE} = 4
+\item 
+\mbox{\Hypertarget{classConnection_a66cd469fda681ad028b00f818cff1438}\label{classConnection_a66cd469fda681ad028b00f818cff1438}} 
+static readonly String {\bfseries SYSTEM\+\_\+\+FIELD} = \char`\"{}system\char`\"{}
+\end{DoxyCompactItemize}
+\doxysubsection*{Protected Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{classConnection_ab0a25e436434d98130925d173fd97861}{Connection}} (string ip=\char`\"{}127.\+0.\+0.\+1\char`\"{}, int port=7000)
+\begin{DoxyCompactList}\small\item\em Establish a connection to a remote host. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Properties}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{classConnection_a093d89b9b44819667f83c963f452c3dc}\label{classConnection_a093d89b9b44819667f83c963f452c3dc}} 
+Socket {\bfseries socket}\hspace{0.3cm}{\ttfamily  \mbox{[}get, protected set\mbox{]}}
+\item 
+\mbox{\Hypertarget{classConnection_a5cdafef009b3ac66435068f0a7920e1c}\label{classConnection_a5cdafef009b3ac66435068f0a7920e1c}} 
+bool {\bfseries Connected}\hspace{0.3cm}{\ttfamily  \mbox{[}get\mbox{]}}
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Manages reading from and writing to a socket. 
+
+
+
+\doxysubsection{Constructor \& Destructor Documentation}
+\mbox{\Hypertarget{classConnection_ab0a25e436434d98130925d173fd97861}\label{classConnection_ab0a25e436434d98130925d173fd97861}} 
+\index{Connection@{Connection}!Connection@{Connection}}
+\index{Connection@{Connection}!Connection@{Connection}}
+\doxysubsubsection{\texorpdfstring{Connection()}{Connection()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily Connection.\+Connection (\begin{DoxyParamCaption}\item[{string}]{ip = {\ttfamily \char`\"{}127.0.0.1\char`\"{}},  }\item[{int}]{port = {\ttfamily 7000} }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [protected]}}
+
+
+
+Establish a connection to a remote host. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em ip} & \\
+\hline
+{\em port} & \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{classConnection_a1cecbca59584c49bc6afe1605829ce14}\label{classConnection_a1cecbca59584c49bc6afe1605829ce14}} 
+\index{Connection@{Connection}!Connection@{Connection}}
+\index{Connection@{Connection}!Connection@{Connection}}
+\doxysubsubsection{\texorpdfstring{Connection()}{Connection()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily Connection.\+Connection (\begin{DoxyParamCaption}\item[{Socket}]{socket }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Default Constructor 
+
+
+\begin{DoxyParams}{Parameters}
+{\em socket} & \\
+\hline
+\end{DoxyParams}
+
+
+\doxysubsection{Member Function Documentation}
+\mbox{\Hypertarget{classConnection_a4c90295a3ad6abc881fe3b5b9d755332}\label{classConnection_a4c90295a3ad6abc881fe3b5b9d755332}} 
+\index{Connection@{Connection}!ReadJSON@{ReadJSON}}
+\index{ReadJSON@{ReadJSON}!Connection@{Connection}}
+\doxysubsubsection{\texorpdfstring{ReadJSON()}{ReadJSON()}}
+{\footnotesize\ttfamily JObject Connection.\+Read\+JSON (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Read the next packet from the socket.~\newline
+ If a zero-\/length read occurs, then the socket is considered broken and this connection is shut down.~\newline
+ If this occurs the next json object returned will be\+:~\newline
+ \{\textquotesingle{}system\textquotesingle{} \+: \textquotesingle{}disconnect\textquotesingle{}\} 
+
+\begin{DoxyReturn}{Returns}
+A JObject encoded packet
+\end{DoxyReturn}
+
+\begin{DoxyExceptions}{Exceptions}
+{\em \mbox{\hyperlink{classConnectionException}{Connection\+Exception}}} & \\
+\hline
+\end{DoxyExceptions}
+\mbox{\Hypertarget{classConnection_a6843e65d8d19dc6d024ecb534b908c36}\label{classConnection_a6843e65d8d19dc6d024ecb534b908c36}} 
+\index{Connection@{Connection}!Shutdown@{Shutdown}}
+\index{Shutdown@{Shutdown}!Connection@{Connection}}
+\doxysubsubsection{\texorpdfstring{Shutdown()}{Shutdown()}}
+{\footnotesize\ttfamily virtual void Connection.\+Shutdown (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [virtual]}}
+
+
+
+Shutdown \& close the underlying socket. 
+
+\mbox{\Hypertarget{classConnection_ace72fcea186e2e9120a6a2eadf6362ec}\label{classConnection_ace72fcea186e2e9120a6a2eadf6362ec}} 
+\index{Connection@{Connection}!Write@{Write}}
+\index{Write@{Write}!Connection@{Connection}}
+\doxysubsubsection{\texorpdfstring{Write()}{Write()}\hspace{0.1cm}{\footnotesize\ttfamily [1/3]}}
+{\footnotesize\ttfamily void Connection.\+Write (\begin{DoxyParamCaption}\item[{JObject}]{j\+Object }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Write a json object to the socket. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em packet} & Non-\/null source json object.\\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{classConnection_a9590d0a2791f5e725cb4e5e981aec024}\label{classConnection_a9590d0a2791f5e725cb4e5e981aec024}} 
+\index{Connection@{Connection}!Write@{Write}}
+\index{Write@{Write}!Connection@{Connection}}
+\doxysubsubsection{\texorpdfstring{Write()}{Write()}\hspace{0.1cm}{\footnotesize\ttfamily [2/3]}}
+{\footnotesize\ttfamily void Connection.\+Write (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classPacket}{Packet}}}]{packet }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Write a packet to the socket. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em packet} & Non-\/null source packet.\\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{classConnection_a9be33675e430b43695dfe50a66fb4667}\label{classConnection_a9be33675e430b43695dfe50a66fb4667}} 
+\index{Connection@{Connection}!Write@{Write}}
+\index{Write@{Write}!Connection@{Connection}}
+\doxysubsubsection{\texorpdfstring{Write()}{Write()}\hspace{0.1cm}{\footnotesize\ttfamily [3/3]}}
+{\footnotesize\ttfamily void Connection.\+Write (\begin{DoxyParamCaption}\item[{string}]{a\+String }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Write a string to the socket. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em packet} & Non-\/null source string.\\
+\hline
+\end{DoxyParams}
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+src/Connection.\+cs\end{DoxyCompactItemize}
