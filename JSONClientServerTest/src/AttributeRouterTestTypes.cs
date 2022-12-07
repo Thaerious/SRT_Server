@@ -25,6 +25,10 @@ public class TestTypes : ThreadedAttributeRouter {
     public short isShort = 0;
     public ushort isUShort = 0;
 
+    public TestTypes(){
+        this.AddHandler(this);
+    }
+
     // Invokes an action with a single string parameter.
     // The method uses a default route, case-insenstive full match.
     [TestMethod]

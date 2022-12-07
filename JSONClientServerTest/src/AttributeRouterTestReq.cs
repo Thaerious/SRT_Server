@@ -16,6 +16,10 @@ public class TestReq : ThreadedAttributeRouter {
     public string hashString = "";   
     public string isString = "";   
 
+    public TestReq(){
+        this.AddHandler(this);
+    }
+
     [TestMethod]
     public void Rule_Order() {
         this.hashString = "";
@@ -35,13 +39,13 @@ public class TestReq : ThreadedAttributeRouter {
         Assert.AreEqual("old", this.isString);        
     } 
 
-    // Add a field to the req object.
+    // Add a parameter to the req object.
     [Route(Rule = ".*", Index = 0)]
     public void Before(string value, [Req]Packet req){
         req["hash"] = "af59b2";
     }
 
-    // The appended field is preserved
+    // The appended parameter is preserved
     [Route(Rule = ".*", Index = 1)]
     public void After([Req]Packet req){
         this.hashString += req["hash"];

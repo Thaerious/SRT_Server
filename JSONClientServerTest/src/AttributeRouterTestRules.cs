@@ -14,6 +14,10 @@ namespace frar.JSONClientServerTest;
 public class TestRuleOrder : ThreadedAttributeRouter {
     public string hashString = "";
 
+    public TestRuleOrder(){
+        this.AddHandler(this);
+    }
+
     [TestMethod]
     public void Rule_Order() {
         this.hashString = "";
