@@ -16,7 +16,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\JSONClientServer\JSONClientServer.csproj" />
+    <ProjectReference Include="..\frarClientServer\frarClientServer.csproj" />
   </ItemGroup>
 
 </Project>

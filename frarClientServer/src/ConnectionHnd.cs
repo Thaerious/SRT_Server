@@ -1,4 +1,4 @@
-namespace frar.JSONServer;
+namespace frar.clientserver;
 
 /// <summary>
 /// Any class that the server invokes upon connection must implement this interface.

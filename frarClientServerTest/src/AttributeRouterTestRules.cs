@@ -6,12 +6,14 @@ using System.Diagnostics;
 
 namespace frar.JSONClientServerTest;
 
-// The router control object can be used to terminate the current route chain.
+// Routes have a default index of zero.
+// Routes are called in the acending order of their index.
+// The lower the index, the earlier the route is called.
 [TestClass]
-public class TestCtrl : ThreadedAttributeRouter {
-    public string hashString = "";   
+public class TestRuleOrder : ThreadedAttributeRouter {
+    public string hashString = "";
 
-    public TestCtrl(){
+    public TestRuleOrder(){
         this.AddHandler(this);
     }
 
@@ -26,25 +28,24 @@ public class TestCtrl : ThreadedAttributeRouter {
             }
         }"));
 
-        Assert.AreEqual("before-middle", this.hashString);
+        Assert.AreEqual("before-middle-after", this.hashString);
     }
 
     // Route with a negative index get's called first.
     [Route(Rule = ".*", Index = -1)]
-    public void Before(string value){
+    public void Before(string value) {
         this.hashString += "before-";
     }
 
-    // This route terminates the chain.
-    [Route(Rule = ".*", Index = 0)]
-    public void SetValue(string value){
-        this.hashString += value;
-        this.TerminateRoute = true;
+    // Route with a positive index get's called third.
+    [Route(Rule = ".*", Index = 1)]
+    public void After(string value) {
+        this.hashString += "-after";
     }
 
-    // Route with a positive index does not get called.
-    [Route(Rule = ".*", Index = 1)]
-    public void After(string value){
-        this.hashString += "-after";
+    // Route with a default index get's called second.
+    [Route]
+    public void SetValue(string value) {
+        this.hashString += value;
     }
 }

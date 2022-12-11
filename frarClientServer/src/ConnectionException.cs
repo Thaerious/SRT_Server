@@ -1,4 +1,4 @@
-namespace frar.JSONServer;
+namespace frar.clientserver;
 
 /// <summary>
 /// Thrown by the Connection class.

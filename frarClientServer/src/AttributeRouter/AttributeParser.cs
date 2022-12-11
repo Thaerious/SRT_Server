@@ -1,6 +1,5 @@
 using System.Reflection;
-
-namespace frar.JSONServer;
+namespace frar.clientserver;
 
 /// <summary>
 /// Data class for recording methods marked by the Route annotation.
@@ -10,11 +9,13 @@ public class RouteEntry {
     public readonly MethodInfo MethodInfo;
     public readonly string Rule;
     public readonly int Index;
+    public readonly object Handler;
 
-    public RouteEntry(MethodInfo methodInfo, string rule, int index) {
+    public RouteEntry(MethodInfo methodInfo, string rule, int index, object Handler) {
         this.MethodInfo = methodInfo;
         this.Rule = rule;
         this.Index = index;
+        this.Handler = Handler;
     }
 
     public override string ToString() {
@@ -26,7 +27,6 @@ public class RouteEntry {
 /// Parses attributes from a class for use in routers.
 /// </summary>
 class AttributeParser {
-
     public static List<MethodInfo> SeekOnConnect(Object target) {
         List<MethodInfo> methodList = new List<MethodInfo>();
         Type type = target.GetType();
@@ -53,9 +53,14 @@ class AttributeParser {
         return methodList;
     }
 
-    public static List<RouteEntry> SeekRoutes(Object target) {
+    /// <summary>
+    /// Look for methods marked [Route] on handler object.
+    /// </summary>
+    /// <param name="handler"></param>
+    /// <returns></returns>
+    public static List<RouteEntry> SeekRoutes(Object handler) {
         List<RouteEntry> routeList = new List<RouteEntry>();
-        Type type = target.GetType();
+        Type type = handler.GetType();
         MethodInfo[] methodInfos = type.GetMethods();
 
         foreach (MethodInfo info in methodInfos) {
@@ -65,12 +70,8 @@ class AttributeParser {
             string action = route.Rule;
             if (action == "") action = $"(?i)^{info.Name.ToLower()}$";
 
-            routeList.Add(new RouteEntry(info, action, route.Index));
+            routeList.Add(new RouteEntry(info, action, route.Index, handler));
         }
-
-        routeList.Sort(delegate (RouteEntry a, RouteEntry b) {
-            return a.Index.CompareTo(b.Index);
-        });
 
         return routeList;
     }

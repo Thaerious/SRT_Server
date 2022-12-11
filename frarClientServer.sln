@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.30114.105
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JSONClientServer", "JSONClientServer\JSONClientServer.csproj", "{13E3A125-1D72-4015-87FD-704CF507B964}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "frarClientServer", "frarClientServer\frarClientServer.csproj", "{13E3A125-1D72-4015-87FD-704CF507B964}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

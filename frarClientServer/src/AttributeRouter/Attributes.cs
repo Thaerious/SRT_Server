@@ -1,6 +1,5 @@
 using System.Reflection;
-
-namespace frar.JSONServer;
+namespace frar.clientserver;
 
 /// <summary>
 /// Annotated methods get invoked when a disconnect occurs.

@@ -1,8 +1,7 @@
 using System.Net;
 using System.Net.Sockets;
 using System.Text;
-using Newtonsoft.Json.Linq;
-namespace frar.JSONServer;
+namespace frar.clientserver;
 
 /// <summary>
 /// Manages reading from and writing to a socket.
@@ -10,11 +9,7 @@ namespace frar.JSONServer;
 public class Connection {
     public static readonly int BUFFER_SIZE = 4096;
     public static readonly int INT_BUFFER_SIZE = 4;
-    public static readonly String SYSTEM_FIELD = "system";
-
-    public Socket socket {
-        get; protected set;
-    }
+    public readonly Socket socket;
 
     public bool Connected {
         get {
@@ -23,16 +18,13 @@ public class Connection {
         }
     }
 
-    /// <summary>
-    /// Establish a connection to a remote host.
-    /// </summary>
-    /// <param name="ip"></param>
-    /// <param name="port"></param>
-    protected Connection(string ip = "127.0.0.1", int port = 7000) {
+    public static Connection ConnectTo(string ip = "127.0.0.1", int port = 7000){
         IPAddress ipAddress = IPAddress.Parse(ip);
-        var ipEndPoint = new IPEndPoint(ipAddress, port);
-        this.socket = new Socket(ipAddress.AddressFamily, SocketType.Stream, ProtocolType.Tcp);
-        this.socket.Connect(ipEndPoint);
+        IPEndPoint ipEndPoint = new IPEndPoint(ipAddress, port);
+        var socket = new Socket(ipAddress.AddressFamily, SocketType.Stream, ProtocolType.Tcp);
+        var connection = new Connection(socket);
+        socket.Connect(ipEndPoint);
+        return connection;
     }
 
     /// <summary>

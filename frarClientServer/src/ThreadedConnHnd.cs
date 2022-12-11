@@ -1,5 +1,4 @@
-using Newtonsoft.Json.Linq;
-namespace frar.JSONServer;
+namespace frar.clientserver;
 
 public enum DISCONNECT_REASON {
     broken,
@@ -15,12 +14,12 @@ public abstract class ThreadedConnHnd : ConnectionHnd {
     private bool isRunning = true;
 
     private Connection? _connection;
-    public Connection Connection{
-        get{
+    public Connection Connection {
+        get {
             if (_connection == null) throw new NullReferenceException();
             return _connection;
         }
-        private set{
+        private set {
             this._connection = value;
         }
     }
@@ -31,14 +30,19 @@ public abstract class ThreadedConnHnd : ConnectionHnd {
             new ThreadStart(() => {
                 while (isRunning) {
                     try {
-                        Packet packet = connection.Read();                        
-                        this.Process(packet);
-                    } catch (ConnectionException) {
-                        if (this.isRunning){
+                        Packet packet = connection.Read();
+                        if (packet == null) {
                             this.isRunning = false;
-                            Console.WriteLine("broken");
                             this.OnDisconnect(DISCONNECT_REASON.broken);
-                        } 
+                        } else {
+                            this.Process(packet);
+                        }
+                    }
+                    catch (ConnectionException) {
+                        if (this.isRunning) {
+                            this.isRunning = false;
+                            this.OnDisconnect(DISCONNECT_REASON.broken);
+                        }
                     }
                 }
             })
@@ -60,7 +64,7 @@ public abstract class ThreadedConnHnd : ConnectionHnd {
     /// Will be 'gracefull' when the server initiated the disconnect. 
     /// Otherwise will be 'broken' indicating an abropt disconnect.
     /// </param>
-    virtual public void OnDisconnect(DISCONNECT_REASON reason){}
+    virtual public void OnDisconnect(DISCONNECT_REASON reason) { }
 
     /// <summary>
     /// Stops listening for new packets and shuts down the underlying connection.
@@ -70,6 +74,7 @@ public abstract class ThreadedConnHnd : ConnectionHnd {
             this.isRunning = false;
             this.Connection.Shutdown();
             this.OnDisconnect(DISCONNECT_REASON.gracefull);
-        } catch (ObjectDisposedException) {}
+        }
+        catch (ObjectDisposedException) { }
     }
 }

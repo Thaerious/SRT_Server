@@ -1,16 +1,15 @@
 using System.Reflection;
 using System.Text.RegularExpressions;
-using Newtonsoft.Json.Linq;
-
-namespace frar.JSONServer;
+namespace frar.clientserver;
 
 /// <summary>
 /// Listens for incoming packets on it's own thread.
 /// Extend this class and add annotations to dictate behaviour.
 /// The accepted method annotations are: OnConnect, OnDisconnect, Route.
 /// </summary>
-public class ThreadedAttributeRouter : ThreadedConnHnd {
-    private List<RouteEntry> routes;
+public abstract class ThreadedRouter : ThreadedConnHnd {
+    private readonly List<object> Handlers = new List<Object>();
+    private readonly List<RouteEntry> routes = new List<RouteEntry>();
 
     /// <summary>
     /// When set to true, no further routes will be processed.
@@ -20,18 +19,21 @@ public class ThreadedAttributeRouter : ThreadedConnHnd {
         get; set;
     } = false;
 
+    public void AddHandler(Object handler){
+        foreach (RouteEntry routeEntry in AttributeParser.SeekRoutes(handler)){
+            this.routes.Add(routeEntry);
+        }
+
+        this.routes.Sort(delegate (RouteEntry a, RouteEntry b) {
+            return a.Index.CompareTo(b.Index);
+        });
+    }
+
     /// <summary>
     /// Retrieve a non-reflective list of route entries.
     /// </summary>
     public List<RouteEntry> Routes {
         get { return new List<RouteEntry>(routes); }
-    }
-
-    /// <summary>
-    /// Default no-arg constructor.
-    /// </summary>
-    public ThreadedAttributeRouter() {
-        this.routes = AttributeParser.SeekRoutes(this);
     }
 
     /// <summary>
@@ -86,7 +88,7 @@ public class ThreadedAttributeRouter : ThreadedConnHnd {
                 }
 
                 try{
-                    method.Invoke(this, parameters.ToArray());
+                    method.Invoke(routeEntry.Handler, parameters.ToArray());
                 } catch (TargetParameterCountException ex){
                     string msg = $"Parameter count mismatch for method '{routeEntry.MethodInfo.Name}'. ";
                     msg += $"Found {parameters.Count} expected {method.GetParameters().Length}.";                          

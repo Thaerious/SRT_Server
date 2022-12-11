@@ -1,7 +1,6 @@
 using System.Net;
 using System.Net.Sockets;
-
-namespace frar.JSONServer;
+namespace frar.clientserver;
 
 /// <summary>
 /// Listens for incoming connections on it's own thread.<br>

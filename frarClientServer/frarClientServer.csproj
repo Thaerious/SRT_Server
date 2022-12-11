@@ -5,11 +5,13 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-
-    <PackageId>JSONClientServer</PackageId>
-    <Version>0.0.1</Version>
+    <PackageId>frar.clientserver</PackageId>
+    <Version>1.0.0-alpha.0</Version>
     <Authors>Ed Armstrong</Authors>
     <Company>frar.ca</Company>
+    <PackageTags>client;server;socket</PackageTags>
+    <IncludeAssets>contentFiles</IncludeAssets>
+    <Description>This client library manages socket communication with annotated classes.</Description>
   </PropertyGroup>
 
   <ItemGroup>

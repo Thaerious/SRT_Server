@@ -1,6 +1,5 @@
-using Newtonsoft.Json.Linq;
 using Newtonsoft.Json;
-namespace frar.JSONServer;
+namespace frar.clientserver;
 
 /// <summary>
 /// Communication packet for the Connection class.<br>
