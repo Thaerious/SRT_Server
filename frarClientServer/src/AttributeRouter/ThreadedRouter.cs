@@ -80,10 +80,11 @@ public abstract class ThreadedRouter : ThreadedConnHnd {
                 List<Object> parameters = new List<Object>();
 
                 // Perform checks on the parameters.
-                // Call each check method, if it returns true then
-                // that method was added to the parameter list.
+                // Call each check method, if it returns true do not continue processing.                
                 foreach (ParameterInfo parameterInfo in method.GetParameters()) {
+                    if (CheckDefault(method, parameterInfo, packet, parameters)) continue;
                     if (SeekReqAnnotation(parameterInfo, packet, parameters)) continue;
+                    CheckParameterExists(method, parameterInfo, packet);
                     if (TypeCheckParameters(parameterInfo, packet, parameters)) continue;
                 }
 
@@ -96,6 +97,29 @@ public abstract class ThreadedRouter : ThreadedConnHnd {
                 }
             }
         }
+    }
+
+    /// <summary>
+    /// Ensures that if the parameter exists on the method that it is present in the packet.
+    /// If the it's not in the packet then check if there is a default value.
+    /// If there is no default value, throw a missing parameter exception.
+    /// </summary>
+    /// <param name="parameterInfo"></param>
+    /// <returns>true to terminate the parameter processing</returns>            
+    public bool CheckDefault(MethodInfo method, ParameterInfo parameterInfo, Packet packet, List<Object> parameters){
+        if (parameterInfo.Name == null) return true;
+        if (packet.Has(parameterInfo.Name)) return false;
+        if (parameterInfo.HasDefaultValue){
+            parameters.Add(parameterInfo.DefaultValue!);
+            return true;
+        }
+        return false;
+    }
+
+    public void CheckParameterExists(MethodInfo method, ParameterInfo parameterInfo, Packet packet){
+        if (parameterInfo.Name == null) return;
+        if (packet.Has(parameterInfo.Name)) return;
+        throw new MissingParameterException(method.Name, parameterInfo.Name);
     }
 
     /// <summary>

@@ -64,6 +64,15 @@ public class Packet {
     }
 
     /// <summary>
+    /// Determine if the packet has the given parameter.
+    /// </summary>
+    /// <param name="parameter"></param>
+    /// <returns>true if the packet has parameter</returns>
+    public bool Has(string parameter){
+        return this.parameters.ContainsKey(parameter);
+    }
+
+    /// <summary>
     /// Generate a JObject string from this packet.
     /// </summary>
     /// <returns></returns>
