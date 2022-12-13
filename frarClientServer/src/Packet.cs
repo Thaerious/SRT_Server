@@ -1,4 +1,6 @@
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
+
 namespace frar.clientserver;
 
 /// <summary>
@@ -20,6 +22,30 @@ public class Packet {
     public object this[string key]{
         get { return parameters[key]; }
         set { parameters[key] = value; }
+    }
+
+    public Object Get(Type type, string key){
+        if (this[key] == null) throw new NullReferenceException();
+        if (this[key] is JArray || this[key] is JObject){
+            string json = this[key].ToString()!;
+            var obj = JsonConvert.DeserializeObject(json, type);
+            if (obj == null) throw new NullReferenceException();
+            return obj;            
+        }
+
+        return Convert.ChangeType(this[key], type);
+    }
+
+    public T Get<T>(string key){
+        if (this[key] == null) throw new NullReferenceException();
+        if (this[key] is JArray || this[key] is JObject){
+            string json = this[key].ToString()!;
+            var obj = JsonConvert.DeserializeObject(json, typeof(T));
+            if (obj == null) throw new NullReferenceException();
+            return (T)obj;            
+        }
+
+        return (T)Convert.ChangeType(this[key], typeof(T));
     }
 
     public Dictionary<string, object> Parameters {
@@ -57,7 +83,7 @@ public class Packet {
     /// </summary>
     /// <param name="name">Name of the parameter</param>
     /// <param name="value">Parameter value (primitive)</param>
-    public Packet Set(string name, IConvertible value) {
+    public Packet Set(string name, object value) {
         if (this.parameters.ContainsKey(name)) this.parameters.Remove(name);
         this.parameters.Add(name, value);
         return this;
