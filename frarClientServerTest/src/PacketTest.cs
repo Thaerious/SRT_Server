@@ -6,7 +6,7 @@ using System.Diagnostics;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
-namespace frar.JSONClientServerTest;
+namespace frar.clientserver.test;
 
 [TestClass]
 public class PacketTest {

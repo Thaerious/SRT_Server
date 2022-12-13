@@ -149,5 +149,8 @@ Development Notes
 Generate api docs
 /JSONClientServer$ doxygen
 
-Run Tests
-/JSONClientServerTest$ dotnet test
+Run Tests (from solution root & test root)
+dotnet test --collect:"XPlat Code Coverage"
+
+Generate coverage reports
+reportgenerator -reports:frarClientServerTest/TestResults/**/*.xml -targetdir:"coverage" -reporttypes:Html

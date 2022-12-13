@@ -4,21 +4,14 @@ using System.Text;
 namespace frar.clientserver;
 
 /// <summary>
-/// Manages reading from and writing to a socket.
+/// Manages reading & writing packets on a socket.
 /// </summary>
 public class Connection {
     public static readonly int BUFFER_SIZE = 4096;
     public static readonly int INT_BUFFER_SIZE = 4;
-    public readonly Socket socket;
+    public readonly Socket Socket;
 
-    public bool Connected {
-        get {
-            if (this.socket == null) return false;
-            return this.socket.Connected;
-        }
-    }
-
-    public static Connection ConnectTo(string ip = "127.0.0.1", int port = 7000){
+    public static Connection ConnectTo(string ip = "127.0.0.1", int port = 7000) {
         IPAddress ipAddress = IPAddress.Parse(ip);
         IPEndPoint ipEndPoint = new IPEndPoint(ipAddress, port);
         var socket = new Socket(ipAddress.AddressFamily, SocketType.Stream, ProtocolType.Tcp);
@@ -32,17 +25,18 @@ public class Connection {
     /// </summary>
     /// <param name="socket"></param>
     public Connection(Socket socket) {
-        this.socket = socket;
+        this.Socket = socket;
     }
 
     private int ReadSize() {
         byte[] bytes = new byte[INT_BUFFER_SIZE];
-        int sz = socket.Receive(bytes, INT_BUFFER_SIZE, SocketFlags.None);
+        int sz = Socket.Receive(bytes, INT_BUFFER_SIZE, SocketFlags.None);
 
         if (sz == INT_BUFFER_SIZE) {
             return BitConverter.ToInt32(bytes, 0);
         }
-        return 0;
+
+        throw new ConnectionException($"Expected {INT_BUFFER_SIZE} bytes read, found {sz}");
     }
 
     private string ReadString(int size) {
@@ -52,7 +46,7 @@ public class Connection {
 
         while (bytesRead < size) {
             int nextReadSize = size < BUFFER_SIZE ? size : BUFFER_SIZE;
-            int count = socket.Receive(bytes, nextReadSize, SocketFlags.None);
+            int count = Socket.Receive(bytes, nextReadSize, SocketFlags.None);
             if (count == 0) break;
             data += Encoding.ASCII.GetString(bytes, 0, count);
             bytesRead += count;
@@ -76,8 +70,8 @@ public class Connection {
             String jsonString = ReadString(size);
             if (jsonString != "") return Packet.FromString(jsonString);
 
-            this.socket.Shutdown(SocketShutdown.Both);
-            this.socket.Close();
+            this.Socket.Shutdown(SocketShutdown.Both);
+            this.Socket.Close();
             return null;
         }
         catch (Exception ex) {
@@ -101,20 +95,22 @@ public class Connection {
         ArgumentNullException.ThrowIfNull(aString);
         byte[] message = Encoding.ASCII.GetBytes(aString);
         byte[] length = BitConverter.GetBytes(message.Length);
-        this.socket.Send(length);
-        this.socket.Send(message);
+        this.Socket.Send(length);
+        this.Socket.Send(message);
     }
 
     /// <summary>
     /// Shutdown & close the underlying socket.
     /// </summary>
     public virtual void Shutdown() {
-        if (socket != null) {
+        if (Socket != null) {
             try {
-                socket.Shutdown(SocketShutdown.Both);
-                socket.Close();
+                Socket.Shutdown(SocketShutdown.Both);
+                Socket.Close();
             }
             catch (ObjectDisposedException) { }
         }
     }
 }
+
+// [1] https://learn.microsoft.com/en-us/dotnet/api/system.net.sockets.socket.connect?view=net-7.0

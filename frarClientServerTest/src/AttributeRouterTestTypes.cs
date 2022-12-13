@@ -4,7 +4,7 @@ using System.Net;
 using System.Threading;
 using System.Diagnostics;
 
-namespace frar.JSONClientServerTest;
+namespace frar.clientserver.test;
 
 [TestClass]
 public class TestTypes : ThreadedRouter {

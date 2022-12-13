@@ -4,7 +4,7 @@ using System.Net;
 using System.Threading;
 using System.Diagnostics;
 
-namespace frar.JSONClientServerTest;
+namespace frar.clientserver.test;
 
 // Routes have a default index of zero.
 // Routes are called in the acending order of their index.
