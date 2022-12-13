@@ -9,9 +9,9 @@
     <Version>1.0.0-alpha.0</Version>
     <Authors>Ed Armstrong</Authors>
     <Company>frar.ca</Company>
-    <PackageTags>client;server;socket</PackageTags>
+    <PackageTags>client;server;socket;annotation</PackageTags>
     <IncludeAssets>contentFiles</IncludeAssets>
-    <Description>This client library manages socket communication with annotated classes.</Description>
+    <Description>Client library to manage socket communication using annotated classes.</Description>
   </PropertyGroup>
 
   <ItemGroup>

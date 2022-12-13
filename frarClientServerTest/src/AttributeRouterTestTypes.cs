@@ -1,5 +1,5 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using frar.JSONServer;
+using frar.clientserver;
 using System.Net;
 using System.Threading;
 using System.Diagnostics;
@@ -7,7 +7,7 @@ using System.Diagnostics;
 namespace frar.JSONClientServerTest;
 
 [TestClass]
-public class TestTypes : ThreadedAttributeRouter {
+public class TestTypes : ThreadedRouter {
     public string isString = "";
     public bool isBool = false;
     public byte isByte = 0;

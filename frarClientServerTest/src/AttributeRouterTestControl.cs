@@ -1,5 +1,5 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using frar.JSONServer;
+using frar.clientserver;
 using System.Net;
 using System.Threading;
 using System.Diagnostics;
@@ -8,7 +8,7 @@ namespace frar.frarClientServerTest;
 
 // The router control object can be used to terminate the current route chain.
 [TestClass]
-public class TestCtrl : ThreadedAttributeRouter {
+public class TestCtrl : ThreadedRouter {
     public string hashString = "";   
 
     public TestCtrl(){

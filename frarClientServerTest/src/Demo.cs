@@ -1,4 +1,4 @@
-using frar.JSONServer;
+using frar.clientserver;
 
 namespace frar.JSONClientServerTest;
 

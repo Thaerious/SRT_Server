@@ -1,5 +1,5 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using frar.JSONServer;
+using frar.clientserver;
 using System.Net;
 using System.Threading;
 using System.Diagnostics;
@@ -10,7 +10,7 @@ namespace frar.JSONClientServerTest;
 // Routes are called in the acending order of their index.
 // The lower the index, the earlier the route is called.
 [TestClass]
-public class TestRuleOrder : ThreadedAttributeRouter {
+public class TestRuleOrder : ThreadedRouter {
     public string hashString = "";
 
     public TestRuleOrder(){

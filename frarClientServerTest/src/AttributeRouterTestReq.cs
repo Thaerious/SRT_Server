@@ -1,5 +1,5 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using frar.JSONServer;
+using frar.clientserver;
 using System.Net;
 using System.Threading;
 using System.Diagnostics;
@@ -12,7 +12,7 @@ namespace frar.JSONClientServerTest;
 // If this object is modified, the modifications will survive to
 // future routes.
 [TestClass]
-public class TestReq : ThreadedAttributeRouter {
+public class TestReq : ThreadedRouter {
     public string hashString = "";   
     public string isString = "";   
 
