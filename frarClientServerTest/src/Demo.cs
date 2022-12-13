@@ -1,14 +1,13 @@
-using frar.clientserver;
-
+using Newtonsoft.Json;
 namespace frar.clientserver.test;
+
 
 public class Demo{
     static void Main(string[] args) {
-        Packet packet = new Packet("some_action");
-        packet.Parameters["value"] =  "a";
-        System.Console.WriteLine(packet.ToString());
-        Packet p2 = Packet.FromString(@"{""Action"":""some_action"",""Parameters"":{}}");
-        System.Console.WriteLine(p2.ToString());
+        string s = "[1, 2, 3]";
+        var x = JsonConvert.DeserializeObject(s, typeof(int[]));
+        System.Console.WriteLine(x.GetType());
     }
 }
+
 
