@@ -100,4 +100,8 @@ public class PacketTest {
 public class SimpleObject {
     public int a;
     public int b;
+
+    public SimpleObject() { }
+
+    public SimpleObject(int a, int b) { this.a = a;  this.b = b; }
 }

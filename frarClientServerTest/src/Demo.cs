@@ -9,5 +9,3 @@ public class Demo{
         System.Console.WriteLine(x.GetType());
     }
 }
-
-
