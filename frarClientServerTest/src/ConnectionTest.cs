@@ -40,14 +40,14 @@ public class ConnectionTest {
         Connection? c1 = null, c2 = null;
 
         Task t1 = Task.Run(() => {
-            Socket socket = server.Accept();
+            Socket socket = server!.Accept();
             c1 = new Connection(socket);
         });
 
         System.Threading.Thread.Sleep(10);
 
-        var socket = new Socket(ipAddress.AddressFamily, SocketType.Stream, ProtocolType.Tcp);
-        socket.Connect(ipEndPoint);
+        var socket = new Socket(ipAddress!.AddressFamily, SocketType.Stream, ProtocolType.Tcp);
+        socket.Connect(ipEndPoint!);
         c2 = new Connection(socket);
 
         t1.Wait();

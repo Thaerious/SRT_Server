@@ -114,3 +114,7 @@ public class Packet {
         return JsonConvert.SerializeObject(this, formatting);
     }    
 }
+
+public class EmptyPacket : Packet{
+    public EmptyPacket() : base(""){}
+}

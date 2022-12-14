@@ -72,7 +72,7 @@ public class Connection {
 
             this.Socket.Shutdown(SocketShutdown.Both);
             this.Socket.Close();
-            return null;
+            return new EmptyPacket();
         }
         catch (Exception ex) {
             throw new ConnectionException("connection exception while reading", ex);
