@@ -1,6 +1,10 @@
 Creating & Staring a Server
 ===========================
 
+The server instantiates a handler class each time a new connection is accepted.
+The handler is responsible for accepting incoming packets and calling methods to handle them.
+The handler needs to extend 'Handler' and must have a no-argument contructor.
+
 Create a server which instantiates a new MyRouter object when a client connects.
 The MyRouter class is responsible for managing Annotated classes.
 
@@ -42,7 +46,7 @@ class MyRouter : ThreadedRouter{
 }
 ```
 
-Creating & a Client
+Creating a Client
 ===========================
 
 A Client is connected by creating a Socket and passing it to a Connection.

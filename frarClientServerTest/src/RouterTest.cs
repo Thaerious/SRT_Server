@@ -3,7 +3,7 @@ namespace frar.clientserver.test;
 
 ///
 /// Create a Router instance and call the methods by processing packets.
-/// The RouterTest class invokes the methods on RouterImpl.
+/// The RouterTest class invokes the methods on Parent.
 /// To test just this class:
 /// dotnet test --filter ClassName=frar.clientserver.test.RouterTest
 [TestClass]
@@ -60,8 +60,7 @@ public class RouterImpl : Router {
     }
 
     [Route]
-    public void SetInt(int value){
+    public virtual void SetInt(int value){
         this.i = value;
     }
-
 }

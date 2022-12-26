@@ -26,7 +26,7 @@ public class RouteEntry {
 /// <summary>
 /// Parses attributes from a class for use in routers.
 /// </summary>
-class AttributeParser {
+public class AttributeParser {
     public static List<MethodInfo> SeekOnConnect(Object target) {
         List<MethodInfo> methodList = new List<MethodInfo>();
         Type type = target.GetType();
@@ -61,7 +61,7 @@ class AttributeParser {
     public static List<RouteEntry> SeekRoutes(Object handler) {
         List<RouteEntry> routeList = new List<RouteEntry>();
         Type type = handler.GetType();
-        MethodInfo[] methodInfos = type.GetMethods();
+        MethodInfo[] methodInfos = type.GetMethods(BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.Instance | BindingFlags.Static);
 
         foreach (MethodInfo info in methodInfos) {
             Route? route = info.GetCustomAttribute<Route>();

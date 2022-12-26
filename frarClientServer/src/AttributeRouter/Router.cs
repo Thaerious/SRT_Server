@@ -1,10 +1,9 @@
-
 using System.Reflection;
 using System.Text.RegularExpressions;
 
 namespace frar.clientserver;
 
-public class Router : ConnectionHnd {
+public class Router {
     private readonly List<object> Handlers = new List<Object>();
     private readonly List<RouteEntry> routes = new List<RouteEntry>();
 
@@ -44,12 +43,9 @@ public class Router : ConnectionHnd {
         get { return new List<RouteEntry>(routes); }
     }
 
-    public virtual void OnConnect(Connection connection) {
+    [OnConnect]
+    protected virtual void OnConnect(Connection connection) {
         this.Connection = connection;
-
-        foreach (MethodInfo method in AttributeParser.SeekOnConnect(this)) {
-            method.Invoke(this, new object[] { connection });
-        }
     }
 
     /// <summary>

@@ -1,5 +1,7 @@
 using System.Net;
 using System.Net.Sockets;
+using System.Reflection;
+
 namespace frar.clientserver;
 
 /// <summary>
@@ -9,7 +11,7 @@ namespace frar.clientserver;
 /// 
 /// </summary>
 /// <typeparam name="HND">The object type emitted when a connection occurs.</typeparam>
-public class Server<HND> where HND : ConnectionHnd, new() {
+public class Server<HND> where HND : Router, new() {
     public Socket socket {
         get; private set;
     } = null!;
@@ -74,7 +76,11 @@ public class Server<HND> where HND : ConnectionHnd, new() {
         Socket socket = this.socket.Accept();
         Connection connection = new Connection(socket);
         HND hnd = new HND();
-        hnd.OnConnect(connection);
+        
+        foreach (MethodInfo method in AttributeParser.SeekOnConnect(this)) {
+            method.Invoke(this, new object[] { connection });
+        }
+
         return hnd;
     }
 
