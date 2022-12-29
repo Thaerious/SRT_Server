@@ -6,7 +6,7 @@ namespace frar.clientserver;
 /// <summary>
 /// Manages reading & writing packets on a socket.
 /// </summary>
-public class Connection {
+public class Connection : IConnection {
     public static readonly int BUFFER_SIZE = 4096;
     public static readonly int INT_BUFFER_SIZE = 4;
     public readonly Socket Socket;

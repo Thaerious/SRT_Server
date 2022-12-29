@@ -7,13 +7,13 @@ public class Router {
     private readonly List<object> Handlers = new List<Object>();
     private readonly List<RouteEntry> routes = new List<RouteEntry>();
 
-    private Connection? _connection;
-    public Connection Connection {
+    private IConnection? _connection;
+    public IConnection Connection {
         get {
             if (_connection == null) throw new NullReferenceException();
             return _connection;
         }
-        private set {
+        set {
             this._connection = value;
         }
     }
@@ -44,7 +44,8 @@ public class Router {
     }
 
     [OnConnect]
-    protected virtual void OnConnect(Connection connection) {
+    protected virtual void OnConnect(IConnection connection) {
+        System.Console.WriteLine("ON CONNECT ROUTER");
         this.Connection = connection;
     }
 

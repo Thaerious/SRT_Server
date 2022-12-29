@@ -15,7 +15,9 @@ public abstract class ThreadedRouter : Router {
     private bool isRunning = true;
 
     [OnConnect]
-    protected override void OnConnect(Connection connection) {
+    protected override void OnConnect(IConnection connection) {
+        System.Console.WriteLine("ON CONNECT ThreadedRouter");
+
         base.OnConnect(connection);
 
         this.thread = new Thread(

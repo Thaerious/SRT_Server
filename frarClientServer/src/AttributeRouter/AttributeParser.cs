@@ -30,7 +30,7 @@ public class AttributeParser {
     public static List<MethodInfo> SeekOnConnect(Object target) {
         List<MethodInfo> methodList = new List<MethodInfo>();
         Type type = target.GetType();
-        MethodInfo[] methodInfos = type.GetMethods();
+        MethodInfo[] methodInfos = type.GetMethods(BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.Instance | BindingFlags.Static);
 
         foreach (MethodInfo methodInfo in methodInfos) {
             OnConnect? onConnect = methodInfo.GetCustomAttribute<OnConnect>();
@@ -43,7 +43,7 @@ public class AttributeParser {
     public static List<MethodInfo> SeekOnDisconnect(Object target) {
         List<MethodInfo> methodList = new List<MethodInfo>();
         Type type = target.GetType();
-        MethodInfo[] methodInfos = type.GetMethods();
+        MethodInfo[] methodInfos = type.GetMethods(BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.Instance | BindingFlags.Static);
 
         foreach (MethodInfo methodInfo in methodInfos) {
             OnDisconnect? onDisconnect = methodInfo.GetCustomAttribute<OnDisconnect>();
