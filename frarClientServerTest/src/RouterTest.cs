@@ -38,6 +38,30 @@ public class RouterTest {
         );
         Assert.AreEqual(5, router?.array?[1]);
     }
+
+    [TestMethod]
+    public void Set_Int_Anon_Args(){
+        var router = new RouterImpl();
+        router.Process(new Packet("setint", 3));
+        Assert.AreEqual(3, router.i);
+    }
+
+    [TestMethod]
+    [ExpectedException(typeof(System.ArgumentOutOfRangeException))]
+    public void Set_Int_Anon_Args_Missing(){
+        var router = new RouterImpl();
+        router.Process(new Packet("setint"));
+        Assert.AreEqual(3, router.i);
+    }
+
+    [TestMethod]
+    public void Set_Int_Anon_Args_Multiple_Invoke(){
+        var router = new RouterImpl();
+        var packet = new Packet("setint", 3);
+        router.Process(packet);
+        router.Process(packet);
+        Assert.AreEqual(3, router.i);
+    }    
 }
 
 public class RouterImpl : Router {

@@ -14,7 +14,6 @@ public class RouterController {
 }
 
 public class Router {
-    private readonly List<object> Handlers = new List<Object>();
     private readonly List<RouteEntry> routes = new List<RouteEntry>();
 
     private IConnection? _connection;
@@ -69,10 +68,12 @@ public class Router {
     /// </summary>
     /// <param name="isString">JSON object representing a packet</param>
     public void Process(Packet packet) {
+        System.Console.WriteLine($"Process({packet.Action})");
         var ctrl = new RouterController();
 
         foreach (RouteEntry routeEntry in routes) {
             if (ctrl.TerminateRoute) break;
+            packet.Reset();
 
             Regex rx = new Regex(routeEntry.Rule);
             System.Console.WriteLine(routeEntry.Rule);
@@ -96,9 +97,11 @@ public class Router {
                     // If the parameter is annotated with [Ctrl] give it the controller as a value.
                     if (SeekCtrlAnnotation(parameterInfo, packet, parameters, ctrl)) continue;
 
-                    // Packet must have the parameter when the method does.
+                    // Packet must have the parameter when the method does.  
+                    // Attempt to retrieve an anonymous argument.
                     if (!packet.Has(parameterInfo.Name!)) {
-                        throw new MissingParameterException(method.Name, parameterInfo.Name!);
+                        parameters.Add(packet.NextAnon());
+                        continue;
                     }
 
                     // Assign the value from the packet to the method.

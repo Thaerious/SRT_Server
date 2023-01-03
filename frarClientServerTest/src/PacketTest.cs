@@ -16,7 +16,7 @@ public class PacketTest {
     public void No_Parameters() {
         Packet packet = new Packet("x");
         string actual = packet.ToString(Formatting.None);
-        string expected = @"{""Action"":""x"",""Parameters"":{}}";
+        string expected = @"{""Action"":""x"",""Parameters"":{},""Anonymous"":[]}";
         Assert.AreEqual(expected, actual);
     }
 
@@ -24,7 +24,7 @@ public class PacketTest {
     public void Single_Int_Parameter() {
         Packet packet = new Packet("x").Set("a", 1);
         string actual = packet.ToString(Formatting.None);
-        string expected = @"{""Action"":""x"",""Parameters"":{""a"":1}}";
+        string expected = @"{""Action"":""x"",""Parameters"":{""a"":1},""Anonymous"":[]}";
         Assert.AreEqual(expected, actual);
     }
 
@@ -41,7 +41,7 @@ public class PacketTest {
     public void Single_String_Parameter() {
         Packet packet = new Packet("x").Set("a", "b");
         string actual = packet.ToString(Formatting.None);
-        string expected = @"{""Action"":""x"",""Parameters"":{""a"":""b""}}";
+        string expected = @"{""Action"":""x"",""Parameters"":{""a"":""b""},""Anonymous"":[]}";
         Assert.AreEqual(expected, actual);
     }
 
@@ -49,7 +49,7 @@ public class PacketTest {
     public void Multiple_Parameters() {
         Packet packet = new Packet("x").Set("a", "b").Set("b", 1);
         string actual = packet.ToString(Formatting.None);
-        string expected = @"{""Action"":""x"",""Parameters"":{""a"":""b"",""b"":1}}";
+        string expected = @"{""Action"":""x"",""Parameters"":{""a"":""b"",""b"":1},""Anonymous"":[]}";
         Assert.AreEqual(expected, actual);
     }
 
@@ -57,7 +57,7 @@ public class PacketTest {
     public void Overwrite_Parameter() {
         Packet packet = new Packet("x").Set("a", "b").Set("a", 1);
         string actual = packet.ToString(Formatting.None);
-        string expected = @"{""Action"":""x"",""Parameters"":{""a"":1}}";
+        string expected = @"{""Action"":""x"",""Parameters"":{""a"":1},""Anonymous"":[]}";
         Assert.AreEqual(expected, actual);
     }
 
@@ -65,7 +65,7 @@ public class PacketTest {
     public void Object_Parameter() {
         Packet packet = new Packet("x").Set("myobj", new SimpleObject());
         string actual = packet.ToString(Formatting.None);
-        string expected = @"{""Action"":""x"",""Parameters"":{""myobj"":{""a"":0,""b"":0}}}";
+        string expected = @"{""Action"":""x"",""Parameters"":{""myobj"":{""a"":0,""b"":0}},""Anonymous"":[]}";
         Assert.AreEqual(expected, actual);
     }
 
@@ -82,7 +82,7 @@ public class PacketTest {
     public void Array_Parameter() {
         Packet packet = new Packet("x").Set("ar", new int[] { 1, 2, 3 });
         string actual = packet.ToString(Formatting.None);
-        string expected = @"{""Action"":""x"",""Parameters"":{""ar"":[1,2,3]}}";
+        string expected = @"{""Action"":""x"",""Parameters"":{""ar"":[1,2,3]},""Anonymous"":[]}";
         Assert.AreEqual(expected, actual);
     }
 
@@ -94,6 +94,31 @@ public class PacketTest {
         int[] value = rPacket.Get<int[]>("ar");
         Assert.AreEqual(1, value[0]);
     }    
+
+    
+    [TestMethod]
+    public void Encode_Decode() {
+        Packet packet = new Packet("x").Set("ar", new int[] { 1, 2, 3 });
+        Packet actual = Packet.FromString(packet.ToString());
+
+        // Different Packets
+        Assert.AreNotEqual(packet, actual);
+
+        // Same Values
+        Assert.AreEqual(packet.ToString(), actual.ToString());
+    }
+
+    [TestMethod]
+    public void Encode_Decode_Anon_Args() {
+        Packet packet = new Packet("x", new int[] { 1, 2, 3 });
+        Packet actual = Packet.FromString(packet.ToString());
+
+        // Different Packets
+        Assert.AreNotEqual(packet, actual);
+
+        // Same Values
+        Assert.AreEqual(packet.ToString(), actual.ToString());
+    }      
 }
 
 public class SimpleObject {
