@@ -37,9 +37,9 @@ public class TestCtrl : ThreadedRouter {
 
     // This route terminates the chain.
     [Route(Rule = ".*", Index = 0)]
-    public void SetValue(string value){
+    public void SetValue(string value, [Ctrl] RouterController ctrl){
         this.hashString += value;
-        this.TerminateRoute = true;
+        ctrl.TerminateRoute = true;
     }
 
     // Route with a positive index does not get called.

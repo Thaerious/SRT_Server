@@ -147,6 +147,17 @@ public void PrintPacket([Req] Packet packet) {
 }
 ```
 
+Helpfull Regex
+==============
+
+Case Insensative (default)
+
+    (?i)^action$
+
+Exclude
+    
+    ^(?!prefix).*$
+
 Development Notes
 =================
 

@@ -66,7 +66,6 @@ public class TestReq : ThreadedRouter {
     // The changed action doesn't affect routing.
     [Route(Index = 4)]
     public void SetValue([Req]Packet req){
-        Debug.WriteLine(req);
         this.isString += "old";
     }
 }

@@ -15,10 +15,8 @@ public abstract class ThreadedRouter : Router {
     private bool isRunning = true;
 
     [OnConnect]
-    protected override void OnConnect(IConnection connection) {
-        System.Console.WriteLine("ON CONNECT ThreadedRouter");
-
-        base.OnConnect(connection);
+    protected override void InvokeConnect(IConnection connection) {
+        base.InvokeConnect(connection);
 
         this.thread = new Thread(
             new ThreadStart(() => {
@@ -27,7 +25,7 @@ public abstract class ThreadedRouter : Router {
                         Packet packet = connection.Read();
                         if (packet == null) {
                             this.isRunning = false;
-                            this.OnDisconnect(DISCONNECT_REASON.broken);
+                            this.InvokeDisconnect(DISCONNECT_REASON.broken);
                         }
                         else {
                             this.Process(packet);
@@ -36,7 +34,7 @@ public abstract class ThreadedRouter : Router {
                     catch (ConnectionException) {
                         if (this.isRunning) {
                             this.isRunning = false;
-                            this.OnDisconnect(DISCONNECT_REASON.broken);
+                            this.InvokeDisconnect(DISCONNECT_REASON.broken);
                         }
                     }
                 }
@@ -52,7 +50,7 @@ public abstract class ThreadedRouter : Router {
         try {
             this.isRunning = false;
             this.Connection.Shutdown();
-            this.OnDisconnect(DISCONNECT_REASON.gracefull);
+            this.InvokeDisconnect(DISCONNECT_REASON.gracefull);
         }
         catch (ObjectDisposedException) { }
     }

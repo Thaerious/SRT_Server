@@ -21,6 +21,12 @@ public class OnConnect : Attribute {}
 public class Req : Attribute {}
 
 /// <summary>
+/// Annotating a parameter in a Route marks it as a controller object.
+/// </summary>
+[AttributeUsage(AttributeTargets.Parameter)]
+public class Ctrl : Attribute {}
+
+/// <summary>
 /// Annotated methods will be considered when processing incoming packets.
 /// </summary>
 [AttributeUsage(AttributeTargets.Method)]

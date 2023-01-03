@@ -19,6 +19,11 @@ public class Packet {
         get { return action; }
     }
 
+    // public object this[string key]{
+    //     get { return parameters[key]; }
+    //     set { parameters[key] = value; }
+    // }
+
     public object this[string key]{
         get { return parameters[key]; }
         set { parameters[key] = value; }

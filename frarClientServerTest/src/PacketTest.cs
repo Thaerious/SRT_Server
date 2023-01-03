@@ -91,7 +91,6 @@ public class PacketTest {
         Packet packet = new Packet("x").Set("ar", new int[] { 1, 2, 3 });
         Packet rPacket = Packet.FromString(packet.ToString());
 
-        Debug.WriteLine(rPacket);
         int[] value = rPacket.Get<int[]>("ar");
         Assert.AreEqual(1, value[0]);
     }    

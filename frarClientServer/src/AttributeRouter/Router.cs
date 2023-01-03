@@ -3,6 +3,16 @@ using System.Text.RegularExpressions;
 
 namespace frar.clientserver;
 
+public class RouterController {
+    /// <summary>
+    /// When set to true, no further routes will be processed.
+    /// This field is reset to false whenever a new packet is received.
+    /// </summary>
+    public bool TerminateRoute {
+        get; set;
+    } = false;    
+}
+
 public class Router {
     private readonly List<object> Handlers = new List<Object>();
     private readonly List<RouteEntry> routes = new List<RouteEntry>();
@@ -17,14 +27,6 @@ public class Router {
             this._connection = value;
         }
     }
-
-    /// <summary>
-    /// When set to true, no further routes will be processed.
-    /// This field is reset to false whenever a new packet is received.
-    /// </summary>
-    public bool TerminateRoute {
-        get; set;
-    } = false;
 
     public void AddHandler(Object handler){
         foreach (RouteEntry routeEntry in AttributeParser.SeekRoutes(handler)){
@@ -44,8 +46,7 @@ public class Router {
     }
 
     [OnConnect]
-    protected virtual void OnConnect(IConnection connection) {
-        System.Console.WriteLine("ON CONNECT ROUTER");
+    protected virtual void InvokeConnect(IConnection connection) {
         this.Connection = connection;
     }
 
@@ -55,7 +56,7 @@ public class Router {
     /// A 'broken' disconnect occurs when the socket terminates unexpectedly.
     /// </summary>
     /// <param name="reason">A description of what triggered the disconnect.</param>
-    public void OnDisconnect(DISCONNECT_REASON reason) {
+    public void InvokeDisconnect(DISCONNECT_REASON reason) {
         foreach (MethodInfo method in AttributeParser.SeekOnDisconnect(this)) {
             method.Invoke(this, new object[] { reason });
         }
@@ -68,23 +69,41 @@ public class Router {
     /// </summary>
     /// <param name="isString">JSON object representing a packet</param>
     public void Process(Packet packet) {
-        this.TerminateRoute = false;
+        var ctrl = new RouterController();
+
         foreach (RouteEntry routeEntry in routes) {
-            if (this.TerminateRoute) break;
+            if (ctrl.TerminateRoute) break;
 
             Regex rx = new Regex(routeEntry.Rule);
+            System.Console.WriteLine(routeEntry.Rule);
             if (rx.Matches(packet.Action).Count > 0) {
                 MethodInfo method = routeEntry.MethodInfo;
-
                 List<Object> parameters = new List<Object>();
 
-                // Perform checks on the parameters.
-                // Call each check method, if it returns true do not continue processing.                
+                // For each parameter in the method check the packet for a match.                
                 foreach (ParameterInfo parameterInfo in method.GetParameters()) {
-                    if (CheckDefault(method, parameterInfo, packet, parameters)) continue;
+                    if (parameterInfo.Name == null) continue; // [1]
+
+                    // If the packet does not have the parameter but there is a default value.
+                    if (!packet.Has(parameterInfo.Name!) && parameterInfo.HasDefaultValue) {
+                        parameters.Add(parameterInfo.DefaultValue!);
+                        continue;
+                    }
+
+                    // If the parameter is annotated with [Req] give it the packet as a value.
                     if (SeekReqAnnotation(parameterInfo, packet, parameters)) continue;
-                    CheckParameterExists(method, parameterInfo, packet);
-                    if (TypeCheckParameters(parameterInfo, packet, parameters)) continue;
+
+                    // If the parameter is annotated with [Ctrl] give it the controller as a value.
+                    if (SeekCtrlAnnotation(parameterInfo, packet, parameters, ctrl)) continue;
+
+                    // Packet must have the parameter when the method does.
+                    if (!packet.Has(parameterInfo.Name!)) {
+                        throw new MissingParameterException(method.Name, parameterInfo.Name!);
+                    }
+
+                    // Assign the value from the packet to the method.
+                    var arg = packet.Get(parameterInfo.ParameterType, parameterInfo.Name!);
+                    parameters.Add(arg);
                 }
 
                 try {
@@ -97,29 +116,6 @@ public class Router {
                 }
             }
         }
-    }
-
-    /// <summary>
-    /// Ensures that if the parameter exists on the method that it is present in the packet.
-    /// If the it's not in the packet then check if there is a default value.
-    /// If there is no default value, throw a missing parameter exception.
-    /// </summary>
-    /// <param name="parameterInfo"></param>
-    /// <returns>true to terminate the parameter processing</returns>            
-    public bool CheckDefault(MethodInfo method, ParameterInfo parameterInfo, Packet packet, List<Object> parameters) {
-        if (parameterInfo.Name == null) return true;
-        if (packet.Has(parameterInfo.Name)) return false;
-        if (parameterInfo.HasDefaultValue) {
-            parameters.Add(parameterInfo.DefaultValue!);
-            return true;
-        }
-        return false;
-    }
-
-    public void CheckParameterExists(MethodInfo method, ParameterInfo parameterInfo, Packet packet) {
-        if (parameterInfo.Name == null) return;
-        if (packet.Has(parameterInfo.Name)) return;
-        throw new MissingParameterException(method.Name, parameterInfo.Name);
     }
 
     /// <summary>
@@ -136,22 +132,12 @@ public class Router {
         return true;
     }
 
-    /// <summary>
-    /// Convert the json value to the parameter value.
-    /// </summary>
-    /// <param name="parameterInfo"></param>
-    /// <param name="packet"></param>
-    /// <param name="parameters"></param>
-    /// <returns></returns>
-    private bool TypeCheckParameters(ParameterInfo parameterInfo, Packet packet, List<Object> parameters) {
-        ArgumentNullException.ThrowIfNull(parameterInfo);
-        ArgumentNullException.ThrowIfNull(packet);
-        ArgumentNullException.ThrowIfNull(parameters);
-        if (parameterInfo.Name == null) return true;
-
-        var arg = packet.Get(parameterInfo.ParameterType, parameterInfo.Name);
-        parameters.Add(arg);
-
+    private bool SeekCtrlAnnotation(ParameterInfo parameterInfo, Packet packet, List<Object> parameters, RouterController routerController) {
+        Ctrl? ctrl = parameterInfo.GetCustomAttribute<Ctrl>();
+        if (ctrl == null) return false;
+        parameters.Add(routerController);
         return true;
-    }
+    }    
 }
+
+//[1] https://learn.microsoft.com/en-us/dotnet/api/system.reflection.parameterinfo.name?view=net-7.0#system-reflection-parameterinfo-name
