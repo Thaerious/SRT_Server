@@ -27,6 +27,10 @@ public class Router {
         }
     }
 
+    public Router() {
+        this.AddHandler(this);
+    }
+
     public void AddHandler(Object handler){
         foreach (RouteEntry routeEntry in AttributeParser.SeekRoutes(handler)){
             this.routes.Add(routeEntry);
