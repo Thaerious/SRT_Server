@@ -47,7 +47,7 @@ public class RouterTest {
     }
 
     [TestMethod]
-    [ExpectedException(typeof(System.ArgumentOutOfRangeException))]
+    [ExpectedException(typeof(MissingParameterException))]
     public void Set_Int_Anon_Args_Missing(){
         var router = new RouterImpl();
         router.Process(new Packet("setint"));
@@ -68,10 +68,6 @@ public class RouterImpl : Router {
     public int i = 0;
     public SimpleObject? simple;
     public int[]? array;
-
-    public RouterImpl(){
-        this.AddHandler(this);
-    }
 
     [Route]
     public void SetArray(int[] value){

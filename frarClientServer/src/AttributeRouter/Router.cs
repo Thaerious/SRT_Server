@@ -72,7 +72,6 @@ public class Router {
     /// </summary>
     /// <param name="isString">JSON object representing a packet</param>
     public void Process(Packet packet) {
-        System.Console.WriteLine($"Process({packet.Action})");
         var ctrl = new RouterController();
 
         foreach (RouteEntry routeEntry in routes) {
@@ -80,7 +79,6 @@ public class Router {
             packet.Reset();
 
             Regex rx = new Regex(routeEntry.Rule);
-            System.Console.WriteLine(routeEntry.Rule);
             if (rx.Matches(packet.Action).Count > 0) {
                 MethodInfo method = routeEntry.MethodInfo;
                 List<Object> parameters = new List<Object>();
@@ -89,28 +87,32 @@ public class Router {
                 foreach (ParameterInfo parameterInfo in method.GetParameters()) {
                     if (parameterInfo.Name == null) continue; // [1]
 
-                    // If the packet does not have the parameter but there is a default value.
-                    if (!packet.Has(parameterInfo.Name!) && parameterInfo.HasDefaultValue) {
-                        parameters.Add(parameterInfo.DefaultValue!);
+                    // If the parameter is annotated with [Req] assign packet to value.
+                    if (SeekReqAnnotation(parameterInfo, packet, parameters)) continue;
+
+                    // If the parameter is annotated with [Ctrl] assign controller to value.
+                    if (SeekCtrlAnnotation(parameterInfo, packet, parameters, ctrl)) continue;
+
+                    // If the packet has the parameter, assign it to value.
+                    if (packet.Has(parameterInfo.Name)) {
+                        var arg = packet.Get(parameterInfo.ParameterType, parameterInfo.Name);
+                        parameters.Add(arg);
                         continue;
                     }
 
-                    // If the parameter is annotated with [Req] give it the packet as a value.
-                    if (SeekReqAnnotation(parameterInfo, packet, parameters)) continue;
-
-                    // If the parameter is annotated with [Ctrl] give it the controller as a value.
-                    if (SeekCtrlAnnotation(parameterInfo, packet, parameters, ctrl)) continue;
-
-                    // Packet must have the parameter when the method does.  
                     // Attempt to retrieve an anonymous argument.
-                    if (!packet.Has(parameterInfo.Name!)) {
+                    if (packet.HasAnon()) {
                         parameters.Add(packet.NextAnon());
                         continue;
                     }
 
-                    // Assign the value from the packet to the method.
-                    var arg = packet.Get(parameterInfo.ParameterType, parameterInfo.Name!);
-                    parameters.Add(arg);
+                    // If the parameter provides a default value, use it.
+                    if (parameterInfo.HasDefaultValue) {
+                        parameters.Add(parameterInfo.DefaultValue!);
+                        continue;
+                    }
+
+                    throw new MissingParameterException(method.Name, parameterInfo.Name);
                 }
 
                 try {

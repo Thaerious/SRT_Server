@@ -11,10 +11,6 @@ namespace frar.frarClientServerTest;
 public class TestCtrl : ThreadedRouter {
     public string hashString = "";   
 
-    public TestCtrl(){
-        this.AddHandler(this);
-    }
-
     [TestMethod]
     public void Rule_Order() {
         this.hashString = "";

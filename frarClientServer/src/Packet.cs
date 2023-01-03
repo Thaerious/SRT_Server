@@ -26,6 +26,10 @@ public class Packet {
         set { parameters[key] = value; }
     }
 
+    public bool HasAnon() {
+        return anonIndex < this.anonymous.Count;
+    }
+
     public Object NextAnon() {
         return this.anonymous[anonIndex++];
     }

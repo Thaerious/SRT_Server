@@ -16,10 +16,6 @@ public class TestReq : ThreadedRouter {
     public string hashString = "";   
     public string isString = "";   
 
-    public TestReq(){
-        this.AddHandler(this);
-    }
-
     [TestMethod]
     public void Rule_Order() {
         this.hashString = "";

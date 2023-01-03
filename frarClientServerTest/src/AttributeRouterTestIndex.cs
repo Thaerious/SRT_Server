@@ -13,10 +13,6 @@ namespace frar.clientserver.test;
 public class TestRuleOrder : ThreadedRouter {
     public string hashString = "";
 
-    public TestRuleOrder(){
-        this.AddHandler(this);
-    }
-
     [TestMethod]
     public void Rule_Order() {
         this.hashString = "";
